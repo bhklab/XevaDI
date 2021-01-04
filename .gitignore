@@ -1,0 +1,13 @@
+# ds store and env. variables.
+.DS_Store
+.env
+
+# ignoring the initial csv files for cnv, mutation and rna.
+input_data/*/copy_number_variation.*
+input_data/*/mutation.*
+input_data/*/rna_sequencing.*
+
+# ignoring the final csv files for cnv, mutation and rna.
+output_data/*/copy_number_variation.*
+output_data/*/mutation.*
+output_data/*/rna_sequencing.*
