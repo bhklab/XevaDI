@@ -45,15 +45,27 @@ def concat_data_frame(files: List[str]) -> pd.DataFrame:
     return pd.concat(data_frames)
 
 
-def write_df_to_csv(df: pd.DataFrame, path: str, label: str) -> NoReturn:
-    df.to_csv(path, index_label=label)
+def write_df_to_csv(data_frame: pd.DataFrame, path: str, label: str) -> NoReturn:
+    """
+        This function write the dataframe to the give path
+        and assigns the index label to the value passed in the parameter.
+
+        Arguments:
+            data_frame (pandas dataframe): Data Frame that will be written to the file.
+            path (str): The path of the output CSV file.
+            label (str): Index label for .to_csv function in pandas.
+
+        Returns:
+            The function doesn't return anything.
+    """
+    data_frame.to_csv(path, index_label=label)
 
 
 print(" <----------------------------------------- Started Building Drug Table -----------------------------------------> ")
 
 # input files to read and output file path.
 input_files = glob.glob('../input_data/*/drug_screening.*')
-output_file = '~/Desktop/drugs.csv'
+output_file = '../output_data/drugs.csv'
 
 # concatenated data frame.
 drug_input_df = concat_data_frame(input_files)
