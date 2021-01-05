@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import List, NoReturn
+import numpy as np
 import pandas as pd
 
 
@@ -65,6 +66,17 @@ def write_df_to_csv(data_frame: pd.DataFrame, path: str, label: str) -> NoReturn
     data_frame.to_csv(path, index_label=label)
 
 
-def create_series(data, name):
-    index = np.arange(1, len(unique_drugs) + 1)
+def create_series(data: List[str], name: str) -> pd.Series:
+    """
+        This function takes the data and name as the input
+        to create a new pandas series.
+
+        Arguments:
+        data (list of str): This is the input for the pandas series.
+        name (str): The name argument for pandas.Series that gives a name to the series.
+
+        Returns:
+        Series: retuns a pandas series.
+    """
+    index = np.arange(1, len(data) + 1)
     return pd.Series(data, name=name, index=index)
