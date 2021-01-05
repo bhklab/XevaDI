@@ -51,7 +51,7 @@ tissue_output_file = '../output_data/tissues.csv'
 # concatenated data frame.
 tissue_input_df = concat_data_frame(input_files)
 
-# get the list of the unique drugs.
+# get the list of the unique tissues.
 unique_tissues = tissue_input_df['tissue'].unique()
 
 # create the tissue panda series.
@@ -63,16 +63,46 @@ print(" <----------------------------------------- (Done Building Tissue Table) 
 
 
 print(" <----------------------------------------- (Start Building Patient Table) ----------------------------------------> \n")
+# input files to read and output file path.
+input_files = glob.glob('../input_data/*/model_information.*')
+patient_output_file = '../output_data/patients.csv'
+
+# concatenated data frame.
+patient_input_df = concat_data_frame(input_files)
+
+# get the list of the unique patients.
+unique_patients = patient_input_df['patient.id'].unique()
+
+# create the tissue panda series.
+patient_series = create_series(unique_patients, 'patient')
+
+# write pandas series to the csv file.
+write_df_to_csv(patient_series, patient_output_file, 'patient_id')
 print(" <----------------------------------------- (Done Building Patient Table) ----------------------------------------> \n")
 
 
 print(" <----------------------------------------- (Start Building Gene Table) ----------------------------------------> \n")
-print(" <----------------------------------------- (Start Building Tissue Table) ----------------------------------------> \n")
+print(" <----------------------------------------- (Done Building Gene Table) ----------------------------------------> \n")
 
 
 print(" <----------------------------------------- (Start Building Batch Table) ----------------------------------------> \n")
-print(" <----------------------------------------- (Start Building Tissue Table) ----------------------------------------> \n")
+# input files to read and output file path.
+input_files = glob.glob('../input_data/*/batch_information.*')
+batch_output_file = '../output_data/batches.csv'
+
+# concatenated data frame.
+batch_input_df = concat_data_frame(input_files)
+
+# get the list of the unique batches.
+unique_batches = batch_input_df['batch.id'].unique()
+
+# create the tissue panda series.
+batch_series = create_series(unique_batches, 'batch')
+
+# write pandas series to the csv file.
+write_df_to_csv(batch_series, batch_output_file, 'batch_id')
+print(" <----------------------------------------- (Done Building Batch Table) ----------------------------------------> \n")
 
 
-print(" <----------------------------------------- (Start Building Tissue Table) ----------------------------------------> \n")
-print(" <----------------------------------------- (Start Building Tissue Table) ----------------------------------------> \n")
+print(" <----------------------------------------- (Start Building Model Table) ----------------------------------------> \n")
+print(" <----------------------------------------- (Start Building Model Table) ----------------------------------------> \n")

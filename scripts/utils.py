@@ -6,7 +6,8 @@ import pandas as pd
 
 def get_project_root() -> Path:
     """
-        @returns the root path of the project.
+    Returns:
+       The root path of the project.
     """
     return Path(__file__).parent.parent.absolute()
 
