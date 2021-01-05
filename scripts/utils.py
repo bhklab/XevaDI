@@ -63,3 +63,8 @@ def write_df_to_csv(data_frame: pd.DataFrame, path: str, label: str) -> NoReturn
             The function doesn't return anything.
     """
     data_frame.to_csv(path, index_label=label)
+
+
+def create_series(data, name):
+    index = np.arange(1, len(unique_drugs) + 1)
+    return pd.Series(data, name=name, index=index)
