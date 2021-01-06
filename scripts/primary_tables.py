@@ -82,6 +82,21 @@ print(" <----------------------------------------- (Done Building Patient Table)
 
 
 print(" <----------------------------------------- (Start Building Gene Table) ----------------------------------------> \n")
+# input files to read and output file path.
+input_files = glob.glob('../input_data/*/copy_number_variation.*')
+gene_output_file = '../output_data/genes.csv'
+
+# concatenated data frame.
+gene_input_df = concat_data_frame(input_files)
+
+# get the list of the unique genees.
+unique_genes = gene_input_df['gene.id'].unique()
+
+# create the tissue panda series.
+gene_series = create_series(unique_genes, 'gene_name')
+
+# write pandas series to the csv file.
+write_df_to_csv(gene_series, gene_output_file, 'gene_id')
 print(" <----------------------------------------- (Done Building Gene Table) ----------------------------------------> \n")
 
 
