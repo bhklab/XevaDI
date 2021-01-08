@@ -1,5 +1,6 @@
 import glob
 import pathlib
+import re
 import pandas as pd
 import numpy as np
 import os
@@ -83,17 +84,17 @@ print(" <----------------------------------------- (Done Building Patient Table)
 
 print(" <----------------------------------------- (Start Building Gene Table) ----------------------------------------> \n")
 # input files to read and output file path.
-input_files = glob.glob('../input_data/*/copy_number_variation.*')
+input_files = [f for f in glob.glob('../input_data/*/*')
+               if re.search(r'(copy_number_variation|mutation|rna_sequencing)', f)]
+
 gene_output_file = '../output_data/genes.csv'
 
-# concatenated data frame.
-gene_input_df = concat_data_frame(input_files)
-
-# get the list of the unique genees.
-unique_genes = gene_input_df['gene.id'].unique()
+genes = []
+for file in input_files:
+    genes.extend(read_data_in_data_frame(file)['gene.id'].unique())
 
 # create the tissue panda series.
-gene_series = create_series(unique_genes, 'gene_name')
+gene_series = create_series(np.array(list(set(genes))), 'gene_name')
 
 # write pandas series to the csv file.
 write_df_to_csv(gene_series, gene_output_file, 'gene_id')
