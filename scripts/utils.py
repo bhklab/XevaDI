@@ -12,6 +12,20 @@ def get_project_root() -> Path:
     return Path(__file__).parent.parent.absolute()
 
 
+def comment(table):
+    """
+    This function prints a comment for the table that's being built.
+
+    Arguments:
+        table(str): Name of the table.
+
+    Returns:
+        `None`.
+    """
+    print(
+        f'<{40 * "-"} (Start Building {table} Table) {40 * "-"}> \n')
+
+
 def read_data_in_data_frame(file: str) -> pd.DataFrame:
     """
         This function takes the file path as an input and
