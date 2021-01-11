@@ -12,6 +12,9 @@ def dataset_table(path):
     """
     This function creates a pandas data series from the dataset list
     and writes it to the csv file.
+
+    Arguments:
+        path(str): absolute path to the parent's parent directory.
     """
 
     # comment that the dataset table is being built.
@@ -36,6 +39,9 @@ def drug_table(path):
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
+
+    Arguments:
+        path(str): absolute path to the parent's parent directory.
     """
 
     # comment that the drug table is being built.
@@ -60,6 +66,9 @@ def tissue_table(path):
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
+
+    Arguments:
+        path(str): absolute path to the parent's parent directory.
     """
 
     # comment that the tissue table is being built.
@@ -84,6 +93,9 @@ def patient_table(path):
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
+
+    Arguments:
+        path(str): absolute path to the parent's parent directory.
     """
 
     # comment that the patient table is being built.
@@ -108,6 +120,9 @@ def gene_table(path):
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
+
+    Arguments:
+        path(str): absolute path to the parent's parent directory.
     """
 
     # comment that the gene table is being built.
@@ -134,6 +149,9 @@ def batch_table(path):
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
+
+    Arguments:
+        path(str): absolute path to the parent's parent directory.
     """
 
     # comment that the batch table is being built.
