@@ -9,6 +9,11 @@ from utils import get_project_root, read_data_in_data_frame, concat_data_frame, 
 
 
 def dataset_table():
+    """
+    This function creates a pandas data series from the dataset list
+    and writes it to the csv file.
+    """
+
     # comment that the dataset table is being built.
     comment('dataset')
 
@@ -28,6 +33,11 @@ def dataset_table():
 
 
 def drug_table():
+    """
+    This function creates the data frame from the input files, concatenates them
+    and write it to the csv file.
+    """
+
     # comment that the drug table is being built.
     comment('drug')
 
@@ -47,6 +57,11 @@ def drug_table():
 
 
 def tissue_table():
+    """
+    This function creates the data frame from the input files, concatenates them
+    and write it to the csv file.
+    """
+
     # comment that the tissue table is being built.
     comment('tissue')
 
@@ -66,6 +81,11 @@ def tissue_table():
 
 
 def patient_table():
+    """
+    This function creates the data frame from the input files, concatenates them
+    and write it to the csv file.
+    """
+
     # comment that the patient table is being built.
     comment('patient')
 
@@ -85,6 +105,11 @@ def patient_table():
 
 
 def gene_table():
+    """
+    This function creates the data frame from the input files, concatenates them
+    and write it to the csv file.
+    """
+
     # comment that the gene table is being built.
     comment('gene')
 
@@ -106,6 +131,11 @@ def gene_table():
 
 
 def batch_table():
+    """
+    This function creates the data frame from the input files, concatenates them
+    and write it to the csv file.
+    """
+
     # comment that the batch table is being built.
     comment('batch')
 
@@ -131,12 +161,17 @@ def build_primary_tables():
     """
     This function builds all the primary tables in the database.
     """
-    dataset_table()
-    drug_table()
-    tissue_table()
-    patient_table()
-    gene_table()
-    batch_table()
+
+    # gets the path of the root directory.
+    project_path = f'{get_project_root()}/input_data'
+
+    # calling functions to create the data for primary tables.
+    dataset_table(project_path)
+    drug_table(project_path)
+    tissue_table(project_path)
+    patient_table(project_path)
+    gene_table(project_path)
+    batch_table(project_path)
 
 
 # building the primary tables.
