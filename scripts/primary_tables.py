@@ -8,7 +8,7 @@ from typing import List, NoReturn
 from utils import get_project_root, read_data_in_data_frame, concat_data_frame, write_df_to_csv, create_series, comment
 
 
-def dataset_table():
+def dataset_table(path):
     """
     This function creates a pandas data series from the dataset list
     and writes it to the csv file.
@@ -18,7 +18,7 @@ def dataset_table():
     comment('dataset')
 
     # output file.
-    dataset_output_file = '../output_data/datasets.csv'
+    dataset_output_file = f'{path}/output_data/datasets.csv'
 
     # dataset list.
     datasets = ['PDXE(Breast Cancer)', 'PDXE(Colorectal Cancer)', 'PDXE(Cutaneous Melanoma)',
@@ -32,7 +32,7 @@ def dataset_table():
     write_df_to_csv(dataset_series, dataset_output_file, 'dataset_id')
 
 
-def drug_table():
+def drug_table(path):
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
@@ -42,8 +42,8 @@ def drug_table():
     comment('drug')
 
     # input files to read and output file path.
-    input_files = glob.glob('../input_data/*/drug_screening.*')
-    drug_output_file = '../output_data/drugs.csv'
+    input_files = glob.glob(f'{path}/input_data/*/drug_screening.*')
+    drug_output_file = f'{path}/output_data/drugs.csv'
 
     # concatenated data frame.
     drug_input_df = concat_data_frame(input_files)
@@ -56,7 +56,7 @@ def drug_table():
     write_df_to_csv(drug_df, drug_output_file, 'drug_id')
 
 
-def tissue_table():
+def tissue_table(path):
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
@@ -66,8 +66,8 @@ def tissue_table():
     comment('tissue')
 
     # input files to read and output file path.
-    input_files = glob.glob('../input_data/*/model_information.*')
-    tissue_output_file = '../output_data/tissues.csv'
+    input_files = glob.glob(f'{path}/input_data/*/model_information.*')
+    tissue_output_file = f'{path}/output_data/tissues.csv'
 
     # concatenated data frame.
     tissue_input_df = concat_data_frame(input_files)
@@ -80,7 +80,7 @@ def tissue_table():
     write_df_to_csv(tissue_series, tissue_output_file, 'tissue_id')
 
 
-def patient_table():
+def patient_table(path):
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
@@ -90,8 +90,8 @@ def patient_table():
     comment('patient')
 
     # input files to read and output file path.
-    input_files = glob.glob('../input_data/*/model_information.*')
-    patient_output_file = '../output_data/patients.csv'
+    input_files = glob.glob(f'{path}/input_data/*/model_information.*')
+    patient_output_file = f'{path}/output_data/patients.csv'
 
     # concatenated data frame.
     patient_input_df = concat_data_frame(input_files)
@@ -104,7 +104,7 @@ def patient_table():
     write_df_to_csv(patient_series, patient_output_file, 'patient_id')
 
 
-def gene_table():
+def gene_table(path):
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
@@ -114,9 +114,9 @@ def gene_table():
     comment('gene')
 
     # input files to read and output file path.
-    input_files = [f for f in glob.glob('../input_data/*/*')
+    input_files = [f for f in glob.glob(f'{path}/input_data/*/*')
                    if re.search(r'(copy_number_variation|mutation|rna_sequencing)', f)]
-    gene_output_file = '../output_data/genes.csv'
+    gene_output_file = f'{path}/output_data/genes.csv'
 
     # gene list.
     genes = []
@@ -130,7 +130,7 @@ def gene_table():
     write_df_to_csv(gene_series, gene_output_file, 'gene_id')
 
 
-def batch_table():
+def batch_table(path):
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
@@ -140,8 +140,8 @@ def batch_table():
     comment('batch')
 
     # input files to read and output file path.
-    input_files = glob.glob('../input_data/*/batch_information.*')
-    batch_output_file = '../output_data/batches.csv'
+    input_files = glob.glob(f'{path}/input_data/*/batch_information.*')
+    batch_output_file = f'{path}/output_data/batches.csv'
 
     # concatenated data frame.
     batch_input_df = concat_data_frame(input_files)
@@ -162,8 +162,8 @@ def build_primary_tables():
     This function builds all the primary tables in the database.
     """
 
-    # gets the path of the root directory.
-    project_path = f'{get_project_root()}/input_data'
+    # get the path of the root directory.
+    project_path = f'{get_project_root()}'
 
     # calling functions to create the data for primary tables.
     dataset_table(project_path)
