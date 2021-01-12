@@ -8,7 +8,7 @@ from typing import List, NoReturn
 from utils import get_project_root, read_data_in_data_frame, concat_data_frame, write_df_to_csv, create_series, comment
 
 
-def dataset_table(path):
+def dataset_table(path: str) -> NoReturn:
     """
     This function creates a pandas data series from the dataset list
     and writes it to the csv file.
@@ -35,7 +35,7 @@ def dataset_table(path):
     write_df_to_csv(dataset_series, dataset_output_file, 'dataset_id')
 
 
-def drug_table(path):
+def drug_table(path: str) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
@@ -62,7 +62,7 @@ def drug_table(path):
     write_df_to_csv(drug_df, drug_output_file, 'drug_id')
 
 
-def tissue_table(path):
+def tissue_table(path: str) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
@@ -89,7 +89,7 @@ def tissue_table(path):
     write_df_to_csv(tissue_series, tissue_output_file, 'tissue_id')
 
 
-def patient_table(path):
+def patient_table(path: str) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
@@ -116,7 +116,7 @@ def patient_table(path):
     write_df_to_csv(patient_series, patient_output_file, 'patient_id')
 
 
-def gene_table(path):
+def gene_table(path: str) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
@@ -145,7 +145,7 @@ def gene_table(path):
     write_df_to_csv(gene_series, gene_output_file, 'gene_id')
 
 
-def batch_table(path):
+def batch_table(path: str) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
@@ -171,8 +171,30 @@ def batch_table(path):
     write_df_to_csv(batch_series, batch_output_file, 'batch_id')
 
 
-#" <----------------------------------------- (Start Building Model Table) ----------------------------------------> \n"
-#" <----------------------------------------- (Start Building Model Table) ----------------------------------------> \n"
+def model_table(path: str) -> NoReturn:
+    """
+    This function creates the data frame from the input files, concatenates them
+    and write it to the csv file.
+
+    Arguments:
+        path(str): absolute path to the parent's parent directory.
+    """
+
+    # comment that the model table is being built.
+    comment('model')
+
+    # input files to read and output file path.
+    input_files = glob.glob(f'{path}/input_data/*/model_information.*')
+    model_output_file = f'{path}/output_data/models.csv'
+
+    # concatenated data frame.
+    model_input_df = concat_data_frame(input_files)
+
+    # create the model panda series.
+    model_series = create_series(model_input_df['model.id'].unique(), 'model')
+
+    # write pandas series to the csv file.
+    write_df_to_csv(model_series, model_output_file, 'model_id')
 
 
 def build_primary_tables():
@@ -190,6 +212,7 @@ def build_primary_tables():
     patient_table(project_path)
     gene_table(project_path)
     batch_table(project_path)
+    model_table(project_path)
 
 
 # building the primary tables.
