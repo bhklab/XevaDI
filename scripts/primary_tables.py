@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 import os
 from typing import List, NoReturn
-from utils import get_project_root, read_data_in_data_frame, concat_data_frame, write_df_to_csv, create_series, comment
+from utils import get_project_root, read_data_in_data_frame, concat_data_frame, write_data_to_csv, create_series, comment
 
 
 def dataset_table(path: str) -> NoReturn:
@@ -32,7 +32,7 @@ def dataset_table(path: str) -> NoReturn:
     dataset_series = create_series(datasets, 'dataset_name')
 
     # write data to the csv file.
-    write_df_to_csv(dataset_series, dataset_output_file, 'dataset_id')
+    write_data_to_csv(dataset_series, dataset_output_file, 'dataset_id')
 
 
 def drug_table(path: str) -> NoReturn:
@@ -59,7 +59,7 @@ def drug_table(path: str) -> NoReturn:
         drug_input_df['drug'].str.upper().unique(), 'drug_name')
 
     # write data/dataframe to the csv file.
-    write_df_to_csv(drug_df, drug_output_file, 'drug_id')
+    write_data_to_csv(drug_df, drug_output_file, 'drug_id')
 
 
 def tissue_table(path: str) -> NoReturn:
@@ -86,7 +86,7 @@ def tissue_table(path: str) -> NoReturn:
         tissue_input_df['tissue'].unique(), 'tissue_name')
 
     # write pandas series to the csv file.
-    write_df_to_csv(tissue_series, tissue_output_file, 'tissue_id')
+    write_data_to_csv(tissue_series, tissue_output_file, 'tissue_id')
 
 
 def patient_table(path: str) -> NoReturn:
@@ -113,7 +113,7 @@ def patient_table(path: str) -> NoReturn:
         patient_input_df['patient.id'].unique(), 'patient')
 
     # write pandas series to the csv file.
-    write_df_to_csv(patient_series, patient_output_file, 'patient_id')
+    write_data_to_csv(patient_series, patient_output_file, 'patient_id')
 
 
 def gene_table(path: str) -> NoReturn:
@@ -142,7 +142,7 @@ def gene_table(path: str) -> NoReturn:
     gene_series = create_series(np.array(list(set(genes))), 'gene_name')
 
     # write pandas series to the csv file.
-    write_df_to_csv(gene_series, gene_output_file, 'gene_id')
+    write_data_to_csv(gene_series, gene_output_file, 'gene_id')
 
 
 def batch_table(path: str) -> NoReturn:
@@ -168,7 +168,7 @@ def batch_table(path: str) -> NoReturn:
     batch_series = create_series(batch_input_df['batch.id'].unique(), 'batch')
 
     # write pandas series to the csv file.
-    write_df_to_csv(batch_series, batch_output_file, 'batch_id')
+    write_data_to_csv(batch_series, batch_output_file, 'batch_id')
 
 
 def model_table(path: str) -> NoReturn:
@@ -184,17 +184,25 @@ def model_table(path: str) -> NoReturn:
     comment('model')
 
     # input files to read and output file path.
-    input_files = glob.glob(f'{path}/input_data/*/model_information.*')
+    input_files = glob.glob(f'{path}/input_data/*/model_information.csv')
+    patient_file = f'{path}/output_data/patients.csv'
     model_output_file = f'{path}/output_data/models.csv'
 
     # concatenated data frame.
     model_input_df = concat_data_frame(input_files)
 
-    # create the model panda series.
-    model_series = create_series(model_input_df['model.id'].unique(), 'model')
+    # patient information data frame.
+    patient_df = read_data_in_data_frame(patient_file)
+
+    # merge the data frames.
+    merged_df = model_input_df.merge(
+        patient_df, left_on='patient.id', right_on='patient')
+
+    print(merged_df[['model.id', 'patient_id']])
 
     # write pandas series to the csv file.
-    write_df_to_csv(model_series, model_output_file, 'model_id')
+    write_data_to_csv(
+        merged_df[['model.id', 'patient_id']], model_output_file, 'model_id')
 
 
 def build_primary_tables():
