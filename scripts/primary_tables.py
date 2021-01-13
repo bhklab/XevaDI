@@ -198,7 +198,8 @@ def model_table(path: str) -> NoReturn:
     merged_df = model_input_df.merge(
         patient_df, left_on='patient.id', right_on='patient')
 
-    print(merged_df[['model.id', 'patient_id']])
+    # set the index to begin with 1 instead of 0.
+    merged_df.index = np.arange(1, len(merged_df) + 1)
 
     # write pandas series to the csv file.
     write_data_to_csv(
@@ -214,12 +215,12 @@ def build_primary_tables():
     project_path = f'{get_project_root()}'
 
     # calling functions to create the data for primary tables.
-    dataset_table(project_path)
-    drug_table(project_path)
-    tissue_table(project_path)
-    patient_table(project_path)
-    gene_table(project_path)
-    batch_table(project_path)
+    # dataset_table(project_path)
+    # drug_table(project_path)
+    # tissue_table(project_path)
+    # patient_table(project_path)
+    # gene_table(project_path)
+    # batch_table(project_path)
     model_table(project_path)
 
 
