@@ -145,6 +145,38 @@ def gene_table(path: str) -> NoReturn:
     write_data_to_csv(gene_series, gene_output_file, 'gene_id')
 
 
+def sequencing_table(path: str) -> NoReturn:
+    """
+    This function creates the data frame from the input files, concatenates them
+    and write it to the csv file.
+
+    Arguments:
+        path(str): absolute path to the parent's parent directory.
+    """
+
+    # comment that the gene table is being built.
+    comment('sequencing')
+
+    # input files to read and output file path.
+    input_files = [f for f in glob.glob(f'{path}/input_data/*/*')
+                   if re.search(r'(copy_number_variation|mutation|rna_sequencing)', f)]
+    sequencing_output_file = f'{path}/output_data/sequencing.csv'
+
+    # sequencing list.
+    sequencing_uid = []
+    for file in input_files:
+        sequencing_uid.extend(read_data_in_data_frame(file)[
+                              'sequencing.uid'].unique())
+
+    # create the gene panda series.
+    sequencing_series = create_series(
+        np.array(list(set(sequencing_uid))), 'sequencing_id')
+
+    # write pandas series to the csv file.
+    write_data_to_csv(sequencing_series,
+                      sequencing_output_file, 'sequencing_uid')
+
+
 def batch_table(path: str) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
@@ -184,7 +216,7 @@ def model_table(path: str) -> NoReturn:
     comment('model')
 
     # input files to read and output file path.
-    input_files = glob.glob(f'{path}/input_data/*/model_information.csv')
+    input_files = glob.glob(f'{path}/input_data/*/model_information.*')
     patient_file = f'{path}/output_data/patients.csv'
     model_output_file = f'{path}/output_data/models.csv'
 
@@ -201,9 +233,12 @@ def model_table(path: str) -> NoReturn:
     # set the index to begin with 1 instead of 0.
     merged_df.index = np.arange(1, len(merged_df) + 1)
 
+    # renaming column in the dataframe.
+    merged_df.rename(columns={'model.id': 'model'}, inplace=True)
+
     # write pandas series to the csv file.
     write_data_to_csv(
-        merged_df[['model.id', 'patient_id']], model_output_file, 'model_id')
+        merged_df[['model', 'patient_id']], model_output_file, 'model_id')
 
 
 def build_primary_tables():
@@ -222,6 +257,7 @@ def build_primary_tables():
     gene_table(project_path)
     batch_table(project_path)
     model_table(project_path)
+    sequencing_table(project_path)
 
 
 # building the primary tables.
