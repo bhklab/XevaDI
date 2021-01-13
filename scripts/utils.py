@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List, NoReturn
+from typing import List, NoReturn, Union
 import numpy as np
 import pandas as pd
 
@@ -65,20 +65,39 @@ def concat_data_frame(files: List[str]) -> pd.DataFrame:
     return pd.concat(data_frames)
 
 
-def write_df_to_csv(data_frame: pd.DataFrame, path: str, label: str) -> NoReturn:
+def write_data_to_csv(data: Union[pd.Series, pd.DataFrame], path: str, label: str) -> NoReturn:
     """
-        This function write the dataframe to the give path
+        This function write the data to the give path
         and assigns the index label to the value passed in the parameter.
 
         Arguments:
-            data_frame (pandas dataframe): Data Frame that will be written to the file.
+            data (pandas series or pandas data frame): Data that will be written to the file.
             path (str): The path of the output CSV file.
             label (str): Index label for .to_csv function in pandas.
 
         Returns:
             The function doesn't return anything.
     """
-    data_frame.to_csv(path, index_label=label)
+    data.to_csv(path, index_label=label)
+
+
+# def create_data_frame(data: List[str], name: str) -> pd.DataFrame:
+#     """
+#         This function takes the data and name as the input
+#         to create a new pandas dataframe.
+
+#         Arguments:
+#         data (list of str): This is the input for the pandas dataframe.
+#         name (str): The name argument for pandas.DataFrame that gives a name to the dataframe.
+
+#         Returns:
+#         DataFrame: retuns a pandas dataframe.
+#     """
+#     print(len(data))
+#     index = np.arange(1, len(data) + 1)
+#     df = pd.DataFrame(data, index=index)
+#     # df = df.index.rename('model_id')
+#     print(df)
 
 
 def create_series(data: List[str], name: str) -> pd.Series:
