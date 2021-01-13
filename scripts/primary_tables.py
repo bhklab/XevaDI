@@ -215,12 +215,12 @@ def build_primary_tables():
     project_path = f'{get_project_root()}'
 
     # calling functions to create the data for primary tables.
-    # dataset_table(project_path)
-    # drug_table(project_path)
-    # tissue_table(project_path)
-    # patient_table(project_path)
-    # gene_table(project_path)
-    # batch_table(project_path)
+    dataset_table(project_path)
+    drug_table(project_path)
+    tissue_table(project_path)
+    patient_table(project_path)
+    gene_table(project_path)
+    batch_table(project_path)
     model_table(project_path)
 
 
