@@ -241,7 +241,7 @@ def model_table(path: str) -> NoReturn:
         merged_df[['model', 'patient_id']], model_output_file, 'model_id')
 
 
-def build_primary_tables():
+def build_primary_tables() -> NoReturn:
     """
     This function builds all the primary tables in the database.
     """
