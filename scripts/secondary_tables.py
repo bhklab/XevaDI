@@ -154,14 +154,14 @@ def drug_screening_table(path: str) -> NoReturn:
         drug_screening_output_file, 'id')
 
 
-def build_join_tables() -> NoReturn:
+def build_secondary_tables() -> NoReturn:
     # get the path of the root directory.
     project_path = f'{get_project_root()}'
 
-    # batch_response_table(project_path)
-    # batch_information_table(project_path)
-    # model_response_table(project_path)
+    batch_response_table(project_path)
+    batch_information_table(project_path)
+    model_response_table(project_path)
     drug_screening_table(project_path)
 
 
-build_join_tables()
+build_secondary_tables()
