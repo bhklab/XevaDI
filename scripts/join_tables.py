@@ -6,7 +6,7 @@ from typing import NoReturn
 
 
 def batch_response_table(path: str) -> NoReturn:
-	"""
+    """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
 
@@ -14,31 +14,67 @@ def batch_response_table(path: str) -> NoReturn:
         path(str): absolute path to the parent's parent directory.
     """
 
-	# comment.
+    # comment.
     comment('batch_response')
 
-	# input files for batch_response and batch file path and output file path.
+    # input files for batch_response and batch file path and output file path.
     input_files = glob.glob(f'{path}/input_data/*/batch_response.*')
     batch_file = f'{path}/output_data/batches.csv'
     batch_response_output_file = f'{path}/output_data/batch_response.csv'
 
-	# concatenated data frame.
+    # concatenated data frame.
     batch_response_input_df = concat_data_frame(input_files)
 
-	# batch data frame.
+    # batch data frame.
     batch_df = read_data_in_data_frame(batch_file)
 
-	# merging the batch response df and batch df.
+    # merging the batch response df and batch df.
     merged_df = batch_response_input_df.merge(
         batch_df, left_on='batch.id', right_on='batch')
 
     merged_df.index = np.arange(1, len(merged_df) + 1)
 
-	# writing the modified df to the csv file for batch_response table.
+    # writing the modified df to the csv file for batch_response table.
     write_data_to_csv(
         merged_df[['batch_id', 'response_type', 'value']],
         batch_response_output_file, 'id')
-    print(merged_df)
+
+
+def batch_information_table(path: str) -> NoReturn:
+    """
+    This function creates the data frame from the input files, concatenates them
+    and write it to the csv file.
+
+    Arguments:a
+        path(str): absolute path to the parent's parent directory.
+    """
+
+    # comment
+    comment('batch_information')
+
+    # input files for batch_information and batch file path and output file path.
+    input_files = glob.glob(f'{path}/input_data/*/batch_information.*')
+    batch_file = f'{path}/output_data/batches.csv'
+    model_file = f'{path}/output_data/models.csv'
+    batch_information_output_file = f'{path}/output_data/batch_information.csv'
+
+    # concatenated data frame.
+    batch_information_input_df = concat_data_frame(input_files)
+
+    # batch and model data frame.
+    batch_df = read_data_in_data_frame(batch_file)
+    model_df = read_data_in_data_frame(model_file)
+
+    # merging the batch information df and batch df.
+    merged_df = batch_information_input_df.merge(
+        batch_df, left_on='batch.id', right_on='batch').merge(model_df, left_on='model.id', right_on='model')
+
+    merged_df.index = np.arange(1, len(merged_df) + 1)
+
+    # writing the modified df to the csv file for batch_information table.
+    write_data_to_csv(
+        merged_df[['batch_id', 'model_id', 'type']],
+        batch_information_output_file, 'id')
 
 
 def build_join_tables() -> NoReturn:
@@ -46,6 +82,7 @@ def build_join_tables() -> NoReturn:
     project_path = f'{get_project_root()}'
 
     batch_response_table(project_path)
+    batch_information_table(project_path)
 
 
 build_join_tables()
