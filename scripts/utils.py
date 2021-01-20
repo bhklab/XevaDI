@@ -65,7 +65,7 @@ def concat_data_frame(files: List[str]) -> pd.DataFrame:
     return pd.concat(data_frames)
 
 
-def write_data_to_csv(data: Union[pd.Series, pd.DataFrame], path: str, label: str) -> NoReturn:
+def write_data_to_csv(data: Union[pd.Series, pd.DataFrame], path: str, label='none') -> NoReturn:
     """
         This function write the data to the give path
         and assigns the index label to the value passed in the parameter.
@@ -78,7 +78,10 @@ def write_data_to_csv(data: Union[pd.Series, pd.DataFrame], path: str, label: st
         Returns:
             The function doesn't return anything.
     """
-    data.to_csv(path, index_label=label)
+    if label == 'none':
+        data.to_csv(path, index=False)
+    else:
+        data.to_csv(path, index_label=label)
 
 
 # def create_data_frame(data: List[str], name: str) -> pd.DataFrame:
