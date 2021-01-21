@@ -181,6 +181,10 @@ def model_information_table(path: str) -> NoReturn:
     model_information_df = concat_data_frame(input_files)
     model_information_df['drug'] = model_information_df['drug'].str.upper()
 
+    # update if the dataset name is 'TNBC' to 'UHN (Breast Cancer)'
+    model_information_df['dataset'] = model_information_df['dataset'].replace(
+        'TNBC', 'UHN (Breast Cancer)')
+
     # drug and model data frame.
     drug_df = read_data_in_data_frame(drug_file)
     model_df = read_data_in_data_frame(model_file)[['model_id', 'model']]
@@ -209,10 +213,10 @@ def build_secondary_tables() -> NoReturn:
     # get the path of the root directory.
     project_path = f'{get_project_root()}'
 
-    batch_response_table(project_path)
-    batch_information_table(project_path)
-    model_response_table(project_path)
-    drug_screening_table(project_path)
+    # batch_response_table(project_path)
+    # batch_information_table(project_path)
+    # model_response_table(project_path)
+    # drug_screening_table(project_path)
     model_information_table(project_path)
 
 
