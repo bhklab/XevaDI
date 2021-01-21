@@ -154,14 +154,64 @@ def drug_screening_table(path: str) -> NoReturn:
         drug_screening_output_file, 'id')
 
 
+def model_information_table(path: str) -> NoReturn:
+    """
+    This function creates the data frame from the input files, concatenates them
+    and write it to the csv file.
+
+    Arguments:a
+        path(str): absolute path to the parent's parent directory.
+    """
+
+    # comment
+    comment('model_information')
+
+    # input files for model_information and drug file path and output file path.
+    input_files = glob.glob(f'{path}/input_data/*/model_information.csv')
+    drug_file = f'{path}/output_data/drugs.csv'
+    model_file = f'{path}/output_data/models.csv'
+    dataset_file = f'{path}/output_data/datasets.csv'
+    patient_file = f'{path}/output_data/patients.csv'
+    tissue_file = f'{path}/output_data/tissues.csv'
+    model_information_output_file = f'{path}/output_data/model_information.csv'
+
+    # concatenated data frame.
+    model_information_df = concat_data_frame(input_files)
+    model_information_df['drug'] = model_information_df['drug'].str.upper()
+
+    # drug and model data frame.
+    drug_df = read_data_in_data_frame(drug_file)
+    model_df = read_data_in_data_frame(model_file)[['model_id', 'model']]
+    dataset_df = read_data_in_data_frame(dataset_file)
+    tissue_df = read_data_in_data_frame(tissue_file)
+    patient_df = read_data_in_data_frame(patient_file)
+
+    # merged df.
+    merged_df = model_information_df.merge(
+        drug_df, left_on='drug', right_on='drug_name').merge(
+            model_df, left_on='model.id', right_on='model').merge(
+                tissue_df, left_on='tissue', right_on='tissue_name').merge(
+                    patient_df, left_on='patient.id', right_on='patient').merge(
+                        dataset_df, left_on='dataset', right_on='dataset_name')
+
+    merged_df.index = np.arange(1, len(merged_df) + 1)
+
+    # writing the modified df to the csv file for model_information table.
+    write_data_to_csv(
+        merged_df[['model_id', 'tissue_id',
+                   'patient_id', 'drug_id', 'dataset_id']],
+        model_information_output_file, 'id')
+
+
 def build_secondary_tables() -> NoReturn:
     # get the path of the root directory.
     project_path = f'{get_project_root()}'
 
-    batch_response_table(project_path)
-    batch_information_table(project_path)
-    model_response_table(project_path)
-    drug_screening_table(project_path)
+    # batch_response_table(project_path)
+    # batch_information_table(project_path)
+    # model_response_table(project_path)
+    # drug_screening_table(project_path)
+    model_information_table(project_path)
 
 
 build_secondary_tables()
