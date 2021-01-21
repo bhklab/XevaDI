@@ -24,9 +24,9 @@ def dataset_table(path: str) -> NoReturn:
     dataset_output_file = f'{path}/output_data/datasets.csv'
 
     # dataset list.
-    datasets = ['PDXE(Breast Cancer)', 'PDXE(Colorectal Cancer)', 'PDXE(Cutaneous Melanoma)',
-                'PDXE(Gastric Cancer)', 'PDXE(Non-small Cell Lung Carcinoma)', 'PDXE(Pancreatic Ductal Carcinoma)',
-                'UHN(Breast Cancer)', 'McGill(Breast Cancer)']
+    datasets = ['PDXE (Breast Cancer)', 'PDXE (Colorectal Cancer)', 'PDXE (Cutaneous Melanoma)',
+                'PDXE (Gastric Cancer)', 'PDXE (Non-small Cell Lung Carcinoma)', 'PDXE (Pancreatic Ductal Carcinoma)',
+                'UHN (Breast Cancer)', 'McGill (Breast Cancer)']
 
     # create dataset series.
     dataset_series = create_series(datasets, 'dataset_name')
