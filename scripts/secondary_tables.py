@@ -209,15 +209,48 @@ def model_information_table(path: str) -> NoReturn:
         model_information_output_file, 'id')
 
 
+def mutation(path: str) -> NoReturn:
+    """
+    This function creates the data frame from the input files, concatenates them
+    and write it to the csv file.
+
+    Arguments:
+        path(str): absolute path to the parent's parent directory.
+    """
+
+    # comment.
+    comment('mutation')
+
+    # input files.
+    mutation_input_files = glob.glob(f'{path}/input_data/*/mutation.*')
+    sequencing_output_file = f'{path}/output_data/sequencing.csv'
+    gene_output_file = f'{path}/output_data/genes.csv'
+    mutation_output_file = f'{path}/output_data/mutation.csv'
+
+    # sequencing and gene data frame.
+    sequencing_df = read_data_in_data_frame(sequencing_output_file)
+    gene_df = read_data_in_data_frame(gene_output_file)
+
+    #
+    for file in mutation_input_files:
+        mutation_df = read_data_in_data_frame(file)
+        merged_df = mutation_df.merge(
+            sequencing_df, left_on='sequencing.uid', right_on='sequencing_id').merge(
+                gene_df, left_on='gene.id', right_on='gene_name')
+        write_data_to_csv(
+            merged_df[['gene_id', 'sequencing_id', 'value']], mutation_output_file, 'id')
+
+
 def build_secondary_tables() -> NoReturn:
     # get the path of the root directory.
     project_path = f'{get_project_root()}'
 
-    # batch_response_table(project_path)
-    # batch_information_table(project_path)
-    # model_response_table(project_path)
-    # drug_screening_table(project_path)
+    batch_response_table(project_path)
+    batch_information_table(project_path)
+    model_response_table(project_path)
+    drug_screening_table(project_path)
     model_information_table(project_path)
+    mutation(project_path)
 
 
 build_secondary_tables()
