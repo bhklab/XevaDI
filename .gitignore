@@ -8,6 +8,6 @@ input_data/*/mutation.*
 input_data/*/rna_sequencing.*
 
 # ignoring the final csv files for cnv, mutation and rna.
-output_data/*/copy_number_variation.*
-output_data/*/mutation.*
-output_data/*/rna_sequencing.*
+output_data/copy_number_variation.*
+output_data/mutation.*
+output_data/rna_sequencing.*
