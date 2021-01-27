@@ -231,7 +231,7 @@ def mutation(path: str) -> NoReturn:
     sequencing_df = read_data_in_data_frame(sequencing_output_file)
     gene_df = read_data_in_data_frame(gene_output_file)
 
-    #
+    # looping through each file and creating the df and writing it to the csv file.
     for file in mutation_input_files:
         mutation_df = read_data_in_data_frame(file)
         merged_df = mutation_df.merge(
@@ -264,7 +264,7 @@ def copy_number_variation(path: str) -> NoReturn:
     sequencing_df = read_data_in_data_frame(sequencing_output_file)
     gene_df = read_data_in_data_frame(gene_output_file)
 
-    #
+    # looping through each file and creating the df and writing it to the csv file.
     for file in copy_number_variation_input_files:
         copy_number_variation_df = read_data_in_data_frame(file)
         merged_df = copy_number_variation_df.merge(
@@ -297,7 +297,7 @@ def rna_sequencing(path: str) -> NoReturn:
     sequencing_df = read_data_in_data_frame(sequencing_output_file)
     gene_df = read_data_in_data_frame(gene_output_file)
 
-    #
+    # looping through each file and creating the df and writing it to the csv file.
     for file in rna_sequencing_input_files:
         rna_sequencing_df = read_data_in_data_frame(file)
         merged_df = rna_sequencing_df.merge(
@@ -305,6 +305,46 @@ def rna_sequencing(path: str) -> NoReturn:
                 gene_df, left_on='gene.id', right_on='gene_name')
         write_data_to_csv(
             merged_df[['gene_id', 'sequencing_id', 'value']], rna_sequencing_output_file, 'id')
+
+
+def modelid_moleculardata_mapping(path: str) -> NoReturn:
+    """
+    This function creates the data frame from the input files, concatenates them
+    and write it to the csv file.
+
+    Arguments:
+        path(str): absolute path to the parent's parent directory.
+    """
+
+    # comment.
+    comment('modelid_moleculardata_mapping')
+
+    # input files.
+    modelid_moleculardata_mapping_input_files = glob.glob(
+        f'{path}/input_data/*/modelid_moleculardata_mapping.*')
+    sequencing_output_file = f'{path}/output_data/sequencing.csv'
+    model_output_file = f'{path}/output_data/models.csv'
+    modelid_moleculardata_mapping_output_file = f'{path}/output_data/modelid_moleculardata_mapping.csv'
+
+    # concatenated data frame.
+    modelid_moleculardata_mapping_df = concat_data_frame(
+        modelid_moleculardata_mapping_input_files)
+
+    # sequencing and gene data frame.
+    sequencing_df = read_data_in_data_frame(sequencing_output_file)
+    model_df = read_data_in_data_frame(model_output_file)
+
+    # merging dfs.
+    merged_df = modelid_moleculardata_mapping_df.merge(
+        model_df, left_on='model.id', right_on='model').merge(
+            sequencing_df, left_on='biobase.id', right_on='sequencing_id')
+
+    merged_df.index = np.arange(1, len(merged_df) + 1)
+
+    # writing the modified df to the csv file for drug_screening table.
+    write_data_to_csv(
+        merged_df[['model_id', 'sequencing_uid', 'mDataType']],
+        modelid_moleculardata_mapping_output_file, 'id')
 
 
 def build_secondary_tables() -> NoReturn:
@@ -319,6 +359,7 @@ def build_secondary_tables() -> NoReturn:
     mutation(project_path)
     copy_number_variation(project_path)
     rna_sequencing(project_path)
+    modelid_moleculardata_mapping(project_path)
 
 
 build_secondary_tables()
