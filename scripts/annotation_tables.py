@@ -11,7 +11,7 @@ def drug_annotation_table(path: str) -> NoReturn:
     and write it to the csv file.
 
     Arguments:
-            path(str): absolute path to the parent's parent directory.
+        path(str): absolute path to the parent's parent directory.
     """
 
     # comment
