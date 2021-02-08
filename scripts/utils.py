@@ -27,7 +27,7 @@ def comment(table):
         f'<{40 * "-"} (Start Building {table} Table) {40 * "-"}> \n')
 
 
-def read_data_in_data_frame(file: str) -> pd.DataFrame:
+def read_data_in_data_frame(file: str, type=None) -> pd.DataFrame:
     """
         This function takes the file path as an input and
         based on the type of the file either excel or csv
@@ -42,7 +42,7 @@ def read_data_in_data_frame(file: str) -> pd.DataFrame:
     if 'xlsx' in file:
         return pd.read_excel(file, engine='openpyxl')
     elif 'csv' in file:
-        return pd.read_csv(file)
+        return pd.read_csv(file, dtype=type)
     else:
         raise ValueError(
             'Invalid Argument to the read_data_in_data_frame function!')
@@ -66,7 +66,7 @@ def concat_data_frame(files: List[str]) -> pd.DataFrame:
     return pd.concat(data_frames)
 
 
-def write_data_to_csv(data: Union[pd.Series, pd.DataFrame], path: str, label=None) -> NoReturn:
+def write_data_to_csv(data: Union[pd.Series, pd.DataFrame], path: str, label=None, type=None) -> NoReturn:
     """
         This function write the data to the give path
         and assigns the index label to the value passed in the parameter.
@@ -84,9 +84,9 @@ def write_data_to_csv(data: Union[pd.Series, pd.DataFrame], path: str, label=Non
 
     # if file does not exist write header.
     if not os.path.isfile(path):
-        data.to_csv(path, index=index)
+        data.to_csv(path, index=index, index_label=label)
     else:  # else it exists so append without writing the header.
-        last_id = read_data_in_data_frame(path).tail(1)[label]
+        last_id = read_data_in_data_frame(path, type=type).tail(1)[label]
         data.index = np.arange(int(last_id) + 1, len(data) + int(last_id) + 1)
         data.to_csv(path, index_label=label, mode='a',
                     header=False, index=index)

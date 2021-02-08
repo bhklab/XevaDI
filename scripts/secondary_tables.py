@@ -228,17 +228,20 @@ def mutation(path: str) -> NoReturn:
     mutation_output_file = f'{path}/output_data/mutation.csv'
 
     # sequencing and gene data frame.
-    sequencing_df = read_data_in_data_frame(sequencing_output_file)
-    gene_df = read_data_in_data_frame(gene_output_file)
+    sequencing_df = read_data_in_data_frame(
+        sequencing_output_file, {'sequencing_uid': int, 'sequencing_id': str})
+    gene_df = read_data_in_data_frame(
+        gene_output_file, {'gene_id': int, 'gene_name': str})
 
     # looping through each file and creating the df and writing it to the csv file.
     for file in mutation_input_files:
-        mutation_df = read_data_in_data_frame(file)
+        mutation_df = read_data_in_data_frame(
+            file, {'id': int, 'gene_id': int, 'sequencing_id': str, 'value': str})
         merged_df = mutation_df.merge(
             sequencing_df, left_on='sequencing.uid', right_on='sequencing_id').merge(
                 gene_df, left_on='gene.id', right_on='gene_name')
         write_data_to_csv(
-            merged_df[['gene_id', 'sequencing_id', 'value']], mutation_output_file, 'id')
+            merged_df[['gene_id', 'sequencing_uid', 'value']], mutation_output_file, 'id', {'gene_id': int, 'sequencing_uid': str, 'value': str})
 
 
 def copy_number_variation(path: str) -> NoReturn:
@@ -271,7 +274,7 @@ def copy_number_variation(path: str) -> NoReturn:
             sequencing_df, left_on='sequencing.uid', right_on='sequencing_id').merge(
                 gene_df, left_on='gene.id', right_on='gene_name')
         write_data_to_csv(
-            merged_df[['gene_id', 'sequencing_id', 'value']], copy_number_variation_output_file, 'id')
+            merged_df[['gene_id', 'sequencing_uid', 'value']], copy_number_variation_output_file, 'id')
 
 
 def rna_sequencing(path: str) -> NoReturn:
@@ -304,7 +307,7 @@ def rna_sequencing(path: str) -> NoReturn:
             sequencing_df, left_on='sequencing.uid', right_on='sequencing_id').merge(
                 gene_df, left_on='gene.id', right_on='gene_name')
         write_data_to_csv(
-            merged_df[['gene_id', 'sequencing_id', 'value']], rna_sequencing_output_file, 'id')
+            merged_df[['gene_id', 'sequencing_uid', 'value']], rna_sequencing_output_file, 'id')
 
 
 def modelid_moleculardata_mapping(path: str) -> NoReturn:
@@ -351,15 +354,15 @@ def build_secondary_tables() -> NoReturn:
     # get the path of the root directory.
     project_path = f'{get_project_root()}'
 
-    batch_response_table(project_path)
-    batch_information_table(project_path)
-    model_response_table(project_path)
-    drug_screening_table(project_path)
-    model_information_table(project_path)
+    # batch_response_table(project_path)
+    # batch_information_table(project_path)
+    # model_response_table(project_path)
+    # drug_screening_table(project_path)
+    # model_information_table(project_path)
     mutation(project_path)
-    copy_number_variation(project_path)
-    rna_sequencing(project_path)
-    modelid_moleculardata_mapping(project_path)
+    # copy_number_variation(project_path)
+    # rna_sequencing(project_path)
+    # modelid_moleculardata_mapping(project_path)
 
 
 build_secondary_tables()
