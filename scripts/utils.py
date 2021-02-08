@@ -40,7 +40,7 @@ def read_data_in_data_frame(file: str, type=None) -> pd.DataFrame:
             DataFrame: returns a dataframe created from the input file.
     """
     if 'xlsx' in file:
-        return pd.read_excel(file, engine='openpyxl')
+        return pd.read_excel(file, engine='openpyxl', dtype=type)
     elif 'csv' in file:
         return pd.read_csv(file, dtype=type)
     else:
