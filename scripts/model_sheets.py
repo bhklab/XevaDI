@@ -20,7 +20,6 @@ def model_sheets_table(path: str) -> NoReturn:
 
     # model sheet data frame.
     sheets_df = read_data_in_data_frame(model_sheet_input)
-    print(sheets_df)
 
     # write data to the csv file.
     write_data_to_csv(
