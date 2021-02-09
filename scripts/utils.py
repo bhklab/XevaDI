@@ -35,6 +35,7 @@ def read_data_in_data_frame(file: str, type=None) -> pd.DataFrame:
 
         Arguments:
             file (str): The name of the file.
+            type (dict): The data type of that data that will be read with the default value None.
 
         Returns:
             DataFrame: returns a dataframe created from the input file.
@@ -75,6 +76,7 @@ def write_data_to_csv(data: Union[pd.Series, pd.DataFrame], path: str, label=Non
             data (pandas series or pandas data frame): Data that will be written to the file.
             path (str): The path of the output CSV file.
             label (str): Index label for .to_csv function in pandas.
+            type (dict): The data type of that data that will be read with the default value None.
 
         Returns:
             The function doesn't return anything.

@@ -44,6 +44,7 @@ def drug_annotation_table(path: str) -> NoReturn:
         annotation_df, left_on='drug_name', right_on='Drug-Name', how='left').merge(
         annotation_df_with_pubchem, left_on='drug_name', right_on='Drug-Name', how='left')
 
+    # renamining the columns for the final output.
     merged_df.rename(columns={'Standard-Name (PubChem)': 'standard_name', 'Targets': 'targets', 'Treatment.type': 'treatment_type',
                               'Class': 'class', 'Class Names': 'class_name', 'Source': 'source'}, inplace=True)
 
