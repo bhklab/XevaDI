@@ -1,4 +1,5 @@
 import glob
+import os
 import pandas as pd
 import numpy as np
 from utils import get_project_root, read_data_in_data_frame, concat_data_frame, write_data_to_csv, comment
@@ -49,10 +50,13 @@ def drug_annotation_table(path: str) -> NoReturn:
                               'Class': 'class', 'Class Names': 'class_name', 'Source': 'source'}, inplace=True)
 
     # writing the modified df to the csv file for drug_annotations table.
-    write_data_to_csv(
-        merged_df[['drug_id', 'standard_name', 'targets',
-                   'treatment_type', 'class', 'class_name', 'source']],
-        drug_annotation_output_file)
+    if not os.path.isfile(drug_annotation_output_file):
+        write_data_to_csv(
+            merged_df[['drug_id', 'standard_name', 'targets',
+                       'treatment_type', 'class', 'class_name', 'source']],
+            drug_annotation_output_file)
+    else:
+        raise ValueError('Drug annotation file is already present!')
 
 
 def build_annotation_tables() -> NoReturn:
@@ -63,4 +67,5 @@ def build_annotation_tables() -> NoReturn:
     drug_annotation_table(project_path)
 
 
+# building annotation tables.
 build_annotation_tables()

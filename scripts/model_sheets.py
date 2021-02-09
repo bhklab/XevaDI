@@ -1,3 +1,4 @@
+import os
 from utils import get_project_root, read_data_in_data_frame, concat_data_frame, write_data_to_csv, comment
 from typing import NoReturn
 
@@ -22,11 +23,15 @@ def model_sheets_table(path: str) -> NoReturn:
     sheets_df = read_data_in_data_frame(model_sheet_input)
 
     # write data to the csv file.
-    write_data_to_csv(
-        sheets_df[['model_id', 'link', 'row']], model_sheet_output)
+    if not os.path.isfile(model_sheet_input):
+        write_data_to_csv(
+            sheets_df[['model_id', 'link', 'row']], model_sheet_output)
+    else:
+        raise ValueError('Model sheet file is already present!!')
 
 
 # get the path of the root directory.
 project_path = f'{get_project_root()}'
+
 # model sheets table.
 model_sheets_table(project_path)
