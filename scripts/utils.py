@@ -27,7 +27,7 @@ def comment(table):
         f'<{40 * "-"} (Start Building {table} Table) {40 * "-"}> \n')
 
 
-def read_data_in_data_frame(file: str, type=None) -> pd.DataFrame:
+def read_data_in_data_frame(file: str, data_type=None) -> pd.DataFrame:
     """
         This function takes the file path as an input and
         based on the type of the file either excel or csv
@@ -35,15 +35,15 @@ def read_data_in_data_frame(file: str, type=None) -> pd.DataFrame:
 
         Arguments:
             file (str): The name of the file.
-            type (dict): The data type of that data that will be read with the default value None.
+            data_type (dict): The data type of that data that will be read with the default value None.
 
         Returns:
             DataFrame: returns a dataframe created from the input file.
     """
     if 'xlsx' in file:
-        return pd.read_excel(file, engine='openpyxl', dtype=type)
+        return pd.read_excel(file, engine='openpyxl', dtype=data_type)
     elif 'csv' in file:
-        return pd.read_csv(file, dtype=type)
+        return pd.read_csv(file, dtype=data_type)
     else:
         raise ValueError(
             'Invalid Argument to the read_data_in_data_frame function!')
@@ -67,7 +67,7 @@ def concat_data_frame(files: List[str]) -> pd.DataFrame:
     return pd.concat(data_frames)
 
 
-def write_data_to_csv(data: Union[pd.Series, pd.DataFrame], path: str, label=None, type=None) -> NoReturn:
+def write_data_to_csv(data: Union[pd.Series, pd.DataFrame], path: str, label=None, data_type=None) -> NoReturn:
     """
         This function write the data to the give path
         and assigns the index label to the value passed in the parameter.
@@ -76,7 +76,7 @@ def write_data_to_csv(data: Union[pd.Series, pd.DataFrame], path: str, label=Non
             data (pandas series or pandas data frame): Data that will be written to the file.
             path (str): The path of the output CSV file.
             label (str): Index label for .to_csv function in pandas.
-            type (dict): The data type of that data that will be read with the default value None.
+            data_type (dict): The data type of that data that will be read with the default value None.
 
         Returns:
             The function doesn't return anything.
@@ -88,7 +88,8 @@ def write_data_to_csv(data: Union[pd.Series, pd.DataFrame], path: str, label=Non
     if not os.path.isfile(path):
         data.to_csv(path, index=index, index_label=label)
     else:  # else it exists so append without writing the header.
-        last_id = read_data_in_data_frame(path, type=type).tail(1)[label]
+        last_id = read_data_in_data_frame(
+            path, data_type=data_type).tail(1)[label]
         data.index = np.arange(int(last_id) + 1, len(data) + int(last_id) + 1)
         data.to_csv(path, index_label=label, mode='a',
                     header=False, index=index)
@@ -110,7 +111,7 @@ def create_series(data: List[str], name: str) -> pd.Series:
     return pd.Series(data, name=name, index=index)
 
 
-def create_unique_list(files: List['str'], column: str, to_upper=False) -> List['str']:
+def create_unique_list(files: List['str'], column: str, to_upper=False, data_type=None) -> List['str']:
     """
         This function creates a unique list from the list of files.
 
@@ -118,6 +119,7 @@ def create_unique_list(files: List['str'], column: str, to_upper=False) -> List[
         files (list of str): This is the list of the files to iterate through.
         column (str): the column that has to be selected from the data frame to be added to the list.
         to_upper (bool): to convert the data to upper case or not.
+        data_type (dict): the data type of the data for the unqiue list.
 
         Returns:
         List: return a list of the unique elements.
@@ -128,9 +130,10 @@ def create_unique_list(files: List['str'], column: str, to_upper=False) -> List[
     # loops through each file and appends the unique data to the list.
     for file in files:
         if to_upper:
-            unique_list.extend(read_data_in_data_frame(file)
+            unique_list.extend(read_data_in_data_frame(file, data_type=data_type)
                                [column].str.upper().unique())
         else:
-            unique_list.extend(read_data_in_data_frame(file)[column].unique())
+            unique_list.extend(read_data_in_data_frame(
+                file, data_type=data_type)[column].unique())
 
     return unique_list
