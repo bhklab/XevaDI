@@ -94,25 +94,6 @@ def write_data_to_csv(data: Union[pd.Series, pd.DataFrame], path: str, label=Non
                     header=False, index=index)
 
 
-# def create_data_frame(data: List[str], name: str) -> pd.DataFrame:
-#     """
-#         This function takes the data and name as the input
-#         to create a new pandas dataframe.
-
-#         Arguments:
-#         data (list of str): This is the input for the pandas dataframe.
-#         name (str): The name argument for pandas.DataFrame that gives a name to the dataframe.
-
-#         Returns:
-#         DataFrame: retuns a pandas dataframe.
-#     """
-#     print(len(data))
-#     index = np.arange(1, len(data) + 1)
-#     df = pd.DataFrame(data, index=index)
-#     # df = df.index.rename('model_id')
-#     print(df)
-
-
 def create_series(data: List[str], name: str) -> pd.Series:
     """
         This function takes the data and name as the input
@@ -127,3 +108,29 @@ def create_series(data: List[str], name: str) -> pd.Series:
     """
     index = np.arange(1, len(data) + 1)
     return pd.Series(data, name=name, index=index)
+
+
+def create_unique_list(files: List['str'], column: str, to_upper=False) -> List['str']:
+    """
+        This function creates a unique list from the list of files.
+
+        Arguments:
+        files (list of str): This is the list of the files to iterate through.
+        column (str): the column that has to be selected from the data frame to be added to the list.
+        to_upper (bool): to convert the data to upper case or not.
+
+        Returns:
+        List: return a list of the unique elements.
+    """
+
+    # unique list of the data.
+    unique_list = []
+    # loops through each file and appends the unique data to the list.
+    for file in files:
+        if to_upper:
+            unique_list.extend(read_data_in_data_frame(file)
+                               [column].str.upper().unique())
+        else:
+            unique_list.extend(read_data_in_data_frame(file)[column].unique())
+
+    return unique_list
