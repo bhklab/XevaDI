@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 import os
 from typing import List, NoReturn
-from utils import get_project_root, read_data_in_data_frame, concat_data_frame, write_data_to_csv, create_series, comment
+from utils import get_project_root, read_data_in_data_frame, concat_data_frame, write_data_to_csv, create_series, comment, create_unique_list
 
 
 def dataset_table(path: str) -> NoReturn:
@@ -51,15 +51,17 @@ def drug_table(path: str) -> NoReturn:
     input_files = glob.glob(f'{path}/input_data/*/drug_screening.*')
     drug_output_file = f'{path}/output_data/drugs.csv'
 
-    # concatenated data frame.
-    drug_input_df = concat_data_frame(input_files)
+    # data type variable containing the datatype of drug.
+    data_type = {'drug': str}
+
+    # unique drug list.
+    drugs = create_unique_list(input_files, 'drug', True, data_type)
 
     # create the drug data frame.
-    drug_df = create_series(
-        drug_input_df['drug'].str.upper().unique(), 'drug_name')
+    drug_series = create_series(np.unique(drugs), 'drug_name')
 
     # write data/dataframe to the csv file.
-    write_data_to_csv(drug_df, drug_output_file, 'drug_id')
+    write_data_to_csv(drug_series, drug_output_file, 'drug_id')
 
 
 def tissue_table(path: str) -> NoReturn:
@@ -78,12 +80,14 @@ def tissue_table(path: str) -> NoReturn:
     input_files = glob.glob(f'{path}/input_data/*/model_information.*')
     tissue_output_file = f'{path}/output_data/tissues.csv'
 
-    # concatenated data frame.
-    tissue_input_df = concat_data_frame(input_files)
+    # data type variable containing the datatype of tissue.
+    data_type = {'tissue': str}
+
+    # unique tissue list.
+    tissues = create_unique_list(input_files, 'tissue', False, data_type)
 
     # create the tissue panda series.
-    tissue_series = create_series(
-        tissue_input_df['tissue'].unique(), 'tissue_name')
+    tissue_series = create_series(np.unique(tissues), 'tissue_name')
 
     # write pandas series to the csv file.
     write_data_to_csv(tissue_series, tissue_output_file, 'tissue_id')
@@ -105,12 +109,14 @@ def patient_table(path: str) -> NoReturn:
     input_files = glob.glob(f'{path}/input_data/*/model_information.*')
     patient_output_file = f'{path}/output_data/patients.csv'
 
-    # concatenated data frame.
-    patient_input_df = concat_data_frame(input_files)
+    # data type variable containing the datatype of the patient id.
+    data_type = {'patient.id': str}
+
+    # unique patient list.
+    patients = create_unique_list(input_files, 'patient.id', False, data_type)
 
     # create the patient panda series.
-    patient_series = create_series(
-        patient_input_df['patient.id'].unique(), 'patient')
+    patient_series = create_series(np.unique(patients), 'patient')
 
     # write pandas series to the csv file.
     write_data_to_csv(patient_series, patient_output_file, 'patient_id')
@@ -133,13 +139,14 @@ def gene_table(path: str) -> NoReturn:
                    if re.search(r'(copy_number_variation|mutation|rna_sequencing)', f)]
     gene_output_file = f'{path}/output_data/genes.csv'
 
-    # gene list.
-    genes = []
-    for file in input_files:
-        genes.extend(read_data_in_data_frame(file)['gene.id'].unique())
+    # data type variable containing the datatype of gene.
+    data_type = {'gene.id': str}
+
+    # unique gene list.
+    genes = create_unique_list(input_files, 'gene.id', False, data_type)
 
     # create the gene panda series.
-    gene_series = create_series(np.array(list(set(genes))), 'gene_name')
+    gene_series = create_series(np.unique(genes), 'gene_name')
 
     # write pandas series to the csv file.
     write_data_to_csv(gene_series, gene_output_file, 'gene_id')
@@ -162,15 +169,16 @@ def sequencing_table(path: str) -> NoReturn:
                    if re.search(r'(copy_number_variation|mutation|rna_sequencing)', f)]
     sequencing_output_file = f'{path}/output_data/sequencing.csv'
 
+    # data type variable containing the datatype of sequencing.
+    data_type = {'sequencing.uid': str}
+
     # sequencing list.
-    sequencing_uid = []
-    for file in input_files:
-        sequencing_uid.extend(read_data_in_data_frame(file)[
-                              'sequencing.uid'].unique())
+    sequencing_uids = create_unique_list(
+        input_files, 'sequencing.uid', False, data_type)
 
     # create the gene panda series.
     sequencing_series = create_series(
-        np.array(list(set(sequencing_uid))), 'sequencing_id')
+        np.unique(sequencing_uids), 'sequencing_id')
 
     # write pandas series to the csv file.
     write_data_to_csv(sequencing_series,
@@ -193,11 +201,14 @@ def batch_table(path: str) -> NoReturn:
     input_files = glob.glob(f'{path}/input_data/*/batch_information.*')
     batch_output_file = f'{path}/output_data/batches.csv'
 
-    # concatenated data frame.
-    batch_input_df = concat_data_frame(input_files)
+    # data type variable containing the datatype of batch.
+    data_type = {'batch.id': str}
+
+    # batches list.
+    batches = create_unique_list(input_files, 'batch.id', False, data_type)
 
     # create the batch panda series.
-    batch_series = create_series(batch_input_df['batch.id'].unique(), 'batch')
+    batch_series = create_series(np.unique(batches), 'batch')
 
     # write pandas series to the csv file.
     write_data_to_csv(batch_series, batch_output_file, 'batch_id')

@@ -23,7 +23,7 @@ def model_sheets_table(path: str) -> NoReturn:
     sheets_df = read_data_in_data_frame(model_sheet_input)
 
     # write data to the csv file.
-    if not os.path.isfile(model_sheet_input):
+    if not os.path.isfile(model_sheet_output):
         write_data_to_csv(
             sheets_df[['model_id', 'link', 'row']], model_sheet_output)
     else:
