@@ -107,8 +107,9 @@ def drug_screening_table(output_files: Dict, input_files: Dict) -> NoReturn:
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
 
-    Arguments:a
-        path(str): absolute path to the parent's parent directory.
+    Arguments:
+        output_files (dict): Contains the dictionary of the output files.
+        input_files (dict): Contains the dictionary of the input files.
     """
 
     # comment
@@ -142,8 +143,9 @@ def model_information_table(output_files: Dict, input_files: Dict) -> NoReturn:
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
 
-    Arguments:a
-        path(str): absolute path to the parent's parent directory.
+    Arguments:
+        output_files (dict): Contains the dictionary of the output files.
+        input_files (dict): Contains the dictionary of the input files.
     """
 
     # comment
@@ -188,7 +190,8 @@ def modelid_moleculardata_mapping(output_files: Dict, input_files: Dict) -> NoRe
     and write it to the csv file.
 
     Arguments:
-        path(str): absolute path to the parent's parent directory.
+        output_files (dict): Contains the dictionary of the output files.
+        input_files (dict): Contains the dictionary of the input files.
     """
 
     # comment.
@@ -215,111 +218,94 @@ def modelid_moleculardata_mapping(output_files: Dict, input_files: Dict) -> NoRe
         output_files['modelid_moleculardata_mapping'], 'id')
 
 
-def mutation(path: str, output_files: Dict) -> NoReturn:
+def mutation(output_files: Dict, input_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
 
     Arguments:
-        path(str): absolute path to the parent's parent directory.
+        output_files (dict): Contains the dictionary of the output files.
+        input_files (dict): Contains the dictionary of the input files.
     """
 
     # comment.
     comment('mutation')
 
-    # input files.
-    mutation_input_files = glob.glob(f'{path}/input_data/*/mutation.*')
-    sequencing_output_file = f'{path}/output_data/sequencing.csv'
-    gene_output_file = f'{path}/output_data/genes.csv'
-    mutation_output_file = f'{path}/output_data/mutation.csv'
-
     # sequencing and gene data frame.
     sequencing_df = read_data_in_data_frame(
-        sequencing_output_file, {'sequencing_uid': int, 'sequencing_id': str})
+        output_files['sequencing'], {'sequencing_uid': int, 'sequencing_id': str})
     gene_df = read_data_in_data_frame(
-        gene_output_file, {'gene_id': int, 'gene_name': str})
+        output_files['gene'], {'gene_id': int, 'gene_name': str})
 
     # looping through each file and creating the df and writing it to the csv file.
-    for file in mutation_input_files:
+    for file in input_files['mutation']:
         mutation_df = read_data_in_data_frame(
             file, {'id': int, 'gene_id': int, 'sequencing_id': str, 'value': str})
         merged_df = mutation_df.merge(
             sequencing_df, left_on='sequencing.uid', right_on='sequencing_id').merge(
                 gene_df, left_on='gene.id', right_on='gene_name')
         write_data_to_csv(
-            merged_df[['gene_id', 'sequencing_uid', 'value']], mutation_output_file, 'id', {'gene_id': int, 'sequencing_uid': str, 'value': str})
+            merged_df[['gene_id', 'sequencing_uid', 'value']], output_files['mutation'], 'id', {'gene_id': int, 'sequencing_uid': str, 'value': str})
 
 
-def copy_number_variation(path: str, output_files: Dict) -> NoReturn:
+def copy_number_variation(output_files: Dict, input_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
 
     Arguments:
-        path(str): absolute path to the parent's parent directory.
+        output_files (dict): Contains the dictionary of the output files.
+        input_files (dict): Contains the dictionary of the input files.
     """
 
     # comment.
     comment('copy_number_variation')
 
-    # input files.
-    copy_number_variation_input_files = glob.glob(
-        f'{path}/input_data/*/copy_number_variation.*')
-    sequencing_output_file = f'{path}/output_data/sequencing.csv'
-    gene_output_file = f'{path}/output_data/genes.csv'
-    copy_number_variation_output_file = f'{path}/output_data/copy_number_variation.csv'
-
     # sequencing and gene data frame.
     sequencing_df = read_data_in_data_frame(
-        sequencing_output_file, {'sequencing_uid': int, 'sequencing_id': str})
+        output_files['sequencing'], {'sequencing_uid': int, 'sequencing_id': str})
     gene_df = read_data_in_data_frame(
-        gene_output_file, {'gene_id': int, 'gene_name': str})
+        output_files['gene'], {'gene_id': int, 'gene_name': str})
 
     # looping through each file and creating the df and writing it to the csv file.
-    for file in copy_number_variation_input_files:
+    for file in input_files['copy_number_variation']:
         copy_number_variation_df = read_data_in_data_frame(
             file, {'id': int, 'gene_id': int, 'sequencing_id': str, 'value': str})
         merged_df = copy_number_variation_df.merge(
             sequencing_df, left_on='sequencing.uid', right_on='sequencing_id').merge(
                 gene_df, left_on='gene.id', right_on='gene_name')
         write_data_to_csv(
-            merged_df[['gene_id', 'sequencing_uid', 'value']], copy_number_variation_output_file, 'id', {'gene_id': int, 'sequencing_uid': str, 'value': str})
+            merged_df[['gene_id', 'sequencing_uid', 'value']], output_files['copy_number_variation'], 'id', {'gene_id': int, 'sequencing_uid': str, 'value': str})
 
 
-def rna_sequencing(path: str, output_files: Dict) -> NoReturn:
+def rna_sequencing(output_files: Dict, input_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
 
     Arguments:
-        path(str): absolute path to the parent's parent directory.
+        output_files (dict): Contains the dictionary of the output files.
+        input_files (dict): Contains the dictionary of the input files.
     """
 
     # comment.
     comment('rna_sequencing')
 
-    # input files.
-    rna_sequencing_input_files = glob.glob(
-        f'{path}/input_data/*/rna_sequencing.*')
-    sequencing_output_file = f'{path}/output_data/sequencing.csv'
-    gene_output_file = f'{path}/output_data/genes.csv'
-    rna_sequencing_output_file = f'{path}/output_data/rna_sequencing.csv'
-
     # sequencing and gene data frame.
     sequencing_df = read_data_in_data_frame(
-        sequencing_output_file, {'sequencing_uid': int, 'sequencing_id': str})
+        output_files['sequencing'], {'sequencing_uid': int, 'sequencing_id': str})
     gene_df = read_data_in_data_frame(
-        gene_output_file, {'gene_id': int, 'gene_name': str})
+        output_file['gene'], {'gene_id': int, 'gene_name': str})
 
     # looping through each file and creating the df and writing it to the csv file.
-    for file in rna_sequencing_input_files:
+    for file in input_files['rna_sequencing']:
         rna_sequencing_df = read_data_in_data_frame(
             file, {'id': int, 'gene_id': int, 'sequencing_id': str, 'value': str})
         merged_df = rna_sequencing_df.merge(
             sequencing_df, left_on='sequencing.uid', right_on='sequencing_id').merge(
                 gene_df, left_on='gene.id', right_on='gene_name')
         write_data_to_csv(
-            merged_df[['gene_id', 'sequencing_uid', 'value']], rna_sequencing_output_file, 'id', {'gene_id': int, 'sequencing_uid': str, 'value': str})
+            merged_df[['gene_id', 'sequencing_uid', 'value']], output_files['rna_sequencing'], 'id', {'gene_id': int, 'sequencing_uid': str, 'value': str})
 
 
 def build_secondary_tables() -> NoReturn:
@@ -337,9 +323,9 @@ def build_secondary_tables() -> NoReturn:
     drug_screening_table(output_files_path, input_files_path)
     model_information_table(output_files_path, input_files_path)
     modelid_moleculardata_mapping(output_files_path, input_files_path)
-    mutation(project_path, output_files_path)
-    copy_number_variation(project_path, output_files_path)
-    rna_sequencing(project_path, output_files_path)
+    mutation(output_files_path, input_files_path)
+    copy_number_variation(output_files_path, input_files_path)
+    rna_sequencing(output_files_path, input_files_path)
 
 
 build_secondary_tables()
