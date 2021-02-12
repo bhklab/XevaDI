@@ -2,27 +2,24 @@ import glob
 import pandas as pd
 import numpy as np
 from utils import get_project_root, read_data_in_data_frame, concat_data_frame, write_data_to_csv, comment
-from path import get_output_files_path
+from path import get_output_files_path, get_input_files_path
 from typing import NoReturn, Dict
 
 
-def batch_response_table(path: str, output_files: Dict) -> NoReturn:
+def batch_response_table(output_files: Dict, input_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
 
     Arguments:
-        path(str): absolute path to the parent's parent directory.
+        output_files (dict): Contains the dictionary of the output files.
+        input_files (dict): Contains the dictionary of the input files.
     """
-
     # comment.
     comment('batch_response')
 
-    # input files for batch_response and batch file path and output file path.
-    input_files = glob.glob(f'{path}/input_data/*/batch_response.*')
-
     # concatenated data frame.
-    batch_response_input_df = concat_data_frame(input_files)
+    batch_response_input_df = concat_data_frame(input_files['batch_response'])
 
     # batch data frame.
     batch_df = read_data_in_data_frame(output_files['batch'])
@@ -39,23 +36,22 @@ def batch_response_table(path: str, output_files: Dict) -> NoReturn:
         output_files['batch_response'], 'id')
 
 
-def batch_information_table(path: str, output_files: Dict) -> NoReturn:
+def batch_information_table(output_files: Dict, input_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
 
-    Arguments:a
-        path(str): absolute path to the parent's parent directory.
+    Arguments:
+        output_files (dict): Contains the dictionary of the output files.
+        input_files (dict): Contains the dictionary of the input files.
     """
 
     # comment
     comment('batch_information')
 
-    # input files for batch_information and batch file path and output file path.
-    input_files = glob.glob(f'{path}/input_data/*/batch_information.*')
-
     # concatenated data frame.
-    batch_information_input_df = concat_data_frame(input_files)
+    batch_information_input_df = concat_data_frame(
+        input_files['batch_information'])
 
     # batch and model data frame.
     batch_df = read_data_in_data_frame(output_files['batch'])
@@ -73,23 +69,21 @@ def batch_information_table(path: str, output_files: Dict) -> NoReturn:
         output_files['batch_information'], 'id')
 
 
-def model_response_table(path: str, output_files: Dict) -> NoReturn:
+def model_response_table(output_files: Dict, input_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
 
-    Arguments:a
-        path(str): absolute path to the parent's parent directory.
+    Arguments:
+        output_files (dict): Contains the dictionary of the output files.
+        input_files (dict): Contains the dictionary of the input files.
     """
 
     # comment
     comment('model_response')
 
-    # input files for model_response and drug file path and output file path.
-    input_files = glob.glob(f'{path}/input_data/*/model_response.*')
-
     # concatenated data frame.
-    model_response_df = concat_data_frame(input_files)
+    model_response_df = concat_data_frame(input_files['model_response'])
     model_response_df['drug'] = model_response_df['drug'].str.upper()
 
     # drug and model data frame.
@@ -108,7 +102,7 @@ def model_response_table(path: str, output_files: Dict) -> NoReturn:
         output_files['model_response'], 'id')
 
 
-def drug_screening_table(path: str, output_files: Dict) -> NoReturn:
+def drug_screening_table(output_files: Dict, input_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
@@ -120,11 +114,8 @@ def drug_screening_table(path: str, output_files: Dict) -> NoReturn:
     # comment
     comment('drug_screening')
 
-    # input files for drug_screening and drug file path and output file path.
-    input_files = glob.glob(f'{path}/input_data/*/drug_screening.*')
-
     # concatenated data frame.
-    drug_screening_df = concat_data_frame(input_files)
+    drug_screening_df = concat_data_frame(input_files['drug_screening'])
     drug_screening_df['drug'] = drug_screening_df['drug'].str.upper()
 
     # drug and model data frame.
@@ -146,7 +137,7 @@ def drug_screening_table(path: str, output_files: Dict) -> NoReturn:
         output_files['drug_screening'], 'id')
 
 
-def model_information_table(path: str, output_files: Dict) -> NoReturn:
+def model_information_table(output_files: Dict, input_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
@@ -158,11 +149,8 @@ def model_information_table(path: str, output_files: Dict) -> NoReturn:
     # comment
     comment('model_information')
 
-    # input files for model_information and drug file path and output file path.
-    input_files = glob.glob(f'{path}/input_data/*/model_information.*')
-
     # concatenated data frame.
-    model_information_df = concat_data_frame(input_files)
+    model_information_df = concat_data_frame(input_files['model_information'])
     model_information_df['drug'] = model_information_df['drug'].str.upper()
 
     # update if the dataset name is 'TNBC' to 'UHN (Breast Cancer)'
@@ -192,6 +180,39 @@ def model_information_table(path: str, output_files: Dict) -> NoReturn:
         merged_df[['model_id', 'tissue_id',
                    'patient_id', 'drug_id', 'dataset_id']],
         output_files['model_information'], 'id')
+
+
+def modelid_moleculardata_mapping(output_files: Dict, input_files: Dict) -> NoReturn:
+    """
+    This function creates the data frame from the input files, concatenates them
+    and write it to the csv file.
+
+    Arguments:
+        path(str): absolute path to the parent's parent directory.
+    """
+
+    # comment.
+    comment('modelid_moleculardata_mapping')
+
+    # concatenated data frame.
+    modelid_moleculardata_mapping_df = concat_data_frame(
+        input_files['modelid_moleculardata_mapping'])
+
+    # sequencing and gene data frame.
+    sequencing_df = read_data_in_data_frame(output_files['sequencing'])
+    model_df = read_data_in_data_frame(output_files['model'])
+
+    # merging dfs.
+    merged_df = modelid_moleculardata_mapping_df.merge(
+        model_df, left_on='model.id', right_on='model').merge(
+            sequencing_df, left_on='biobase.id', right_on='sequencing_id')
+
+    merged_df.index = np.arange(1, len(merged_df) + 1)
+
+    # writing the modified df to the csv file for drug_screening table.
+    write_data_to_csv(
+        merged_df[['model_id', 'sequencing_uid', 'mDataType']],
+        output_files['modelid_moleculardata_mapping'], 'id')
 
 
 def mutation(path: str, output_files: Dict) -> NoReturn:
@@ -301,62 +322,24 @@ def rna_sequencing(path: str, output_files: Dict) -> NoReturn:
             merged_df[['gene_id', 'sequencing_uid', 'value']], rna_sequencing_output_file, 'id', {'gene_id': int, 'sequencing_uid': str, 'value': str})
 
 
-def modelid_moleculardata_mapping(path: str, output_files: Dict) -> NoReturn:
-    """
-    This function creates the data frame from the input files, concatenates them
-    and write it to the csv file.
-
-    Arguments:
-        path(str): absolute path to the parent's parent directory.
-    """
-
-    # comment.
-    comment('modelid_moleculardata_mapping')
-
-    # input files.
-    modelid_moleculardata_mapping_input_files = glob.glob(
-        f'{path}/input_data/*/modelid_moleculardata_mapping.*')
-    sequencing_output_file = f'{path}/output_data/sequencing.csv'
-    model_output_file = f'{path}/output_data/models.csv'
-    modelid_moleculardata_mapping_output_file = f'{path}/output_data/modelid_moleculardata_mapping.csv'
-
-    # concatenated data frame.
-    modelid_moleculardata_mapping_df = concat_data_frame(
-        modelid_moleculardata_mapping_input_files)
-
-    # sequencing and gene data frame.
-    sequencing_df = read_data_in_data_frame(sequencing_output_file)
-    model_df = read_data_in_data_frame(model_output_file)
-
-    # merging dfs.
-    merged_df = modelid_moleculardata_mapping_df.merge(
-        model_df, left_on='model.id', right_on='model').merge(
-            sequencing_df, left_on='biobase.id', right_on='sequencing_id')
-
-    merged_df.index = np.arange(1, len(merged_df) + 1)
-
-    # writing the modified df to the csv file for drug_screening table.
-    write_data_to_csv(
-        merged_df[['model_id', 'sequencing_uid', 'mDataType']],
-        modelid_moleculardata_mapping_output_file, 'id')
-
-
 def build_secondary_tables() -> NoReturn:
     # get the path of the root directory.
     project_path = f'{get_project_root()}'
 
-    # get the path of the output files.
+    # get the path of the output files and the input files.
     output_files_path = get_output_files_path(project_path)
+    input_files_path = get_input_files_path(project_path)
 
-    batch_response_table(project_path, output_files_path)
-    batch_information_table(project_path, output_files_path)
-    model_response_table(project_path, output_files_path)
-    drug_screening_table(project_path, output_files_path)
-    model_information_table(project_path, output_files_path)
-    # mutation(project_path, output_files_path)
-    # copy_number_variation(project_path, output_files_path)
-    # rna_sequencing(project_path, output_files_path)
-    modelid_moleculardata_mapping(project_path, output_files_path)
+    # calling the functions to make the secondary tables.s
+    batch_response_table(output_files_path, input_files_path)
+    batch_information_table(output_files_path, input_files_path)
+    model_response_table(output_files_path, input_files_path)
+    drug_screening_table(output_files_path, input_files_path)
+    model_information_table(output_files_path, input_files_path)
+    modelid_moleculardata_mapping(output_files_path, input_files_path)
+    mutation(project_path, output_files_path)
+    copy_number_variation(project_path, output_files_path)
+    rna_sequencing(project_path, output_files_path)
 
 
 build_secondary_tables()
