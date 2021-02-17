@@ -241,9 +241,6 @@ def model_table(path: str) -> NoReturn:
     merged_df = model_input_df.merge(
         patient_df, left_on='patient.id', right_on='patient')
 
-    # set the index to begin with 1 instead of 0.
-    merged_df.index = np.arange(1, len(merged_df) + 1)
-
     # renaming column in the dataframe.
     merged_df.rename(columns={'model.id': 'model'}, inplace=True)
 
