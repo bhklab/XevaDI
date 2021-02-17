@@ -240,12 +240,12 @@ def mutation(output_files: Dict, input_files: Dict) -> NoReturn:
     # looping through each file and creating the df and writing it to the csv file.
     for file in input_files['mutation']:
         mutation_df = read_data_in_data_frame(
-            file, {'id': int, 'gene_id': int, 'sequencing_id': str, 'value': str})
+            file, data_type={'id': int, 'gene.id': str, 'sequencing.uid': str, 'value': str})
         merged_df = mutation_df.merge(
             sequencing_df, left_on='sequencing.uid', right_on='sequencing_id').merge(
                 gene_df, left_on='gene.id', right_on='gene_name')
         write_data_to_csv(
-            merged_df[['gene_id', 'sequencing_uid', 'value']], output_files['mutation'], 'id', {'gene_id': int, 'sequencing_uid': str, 'value': str})
+            merged_df[['gene_id', 'sequencing_uid', 'value']], output_files['mutation'], 'id', {'gene_id': int, 'sequencing_uid': int, 'value': str})
 
 
 def copy_number_variation(output_files: Dict, input_files: Dict) -> NoReturn:
@@ -270,12 +270,12 @@ def copy_number_variation(output_files: Dict, input_files: Dict) -> NoReturn:
     # looping through each file and creating the df and writing it to the csv file.
     for file in input_files['copy_number_variation']:
         copy_number_variation_df = read_data_in_data_frame(
-            file, {'id': int, 'gene_id': int, 'sequencing_id': str, 'value': str})
+            file, data_type={'id': int, 'gene.id': str, 'sequencing.uid': str, 'value': str})
         merged_df = copy_number_variation_df.merge(
             sequencing_df, left_on='sequencing.uid', right_on='sequencing_id').merge(
                 gene_df, left_on='gene.id', right_on='gene_name')
         write_data_to_csv(
-            merged_df[['gene_id', 'sequencing_uid', 'value']], output_files['copy_number_variation'], 'id', {'gene_id': int, 'sequencing_uid': str, 'value': str})
+            merged_df[['gene_id', 'sequencing_uid', 'value']], output_files['copy_number_variation'], 'id', {'gene_id': int, 'sequencing_uid': int, 'value': str})
 
 
 def rna_sequencing(output_files: Dict, input_files: Dict) -> NoReturn:
@@ -295,17 +295,17 @@ def rna_sequencing(output_files: Dict, input_files: Dict) -> NoReturn:
     sequencing_df = read_data_in_data_frame(
         output_files['sequencing'], {'sequencing_uid': int, 'sequencing_id': str})
     gene_df = read_data_in_data_frame(
-        output_file['gene'], {'gene_id': int, 'gene_name': str})
+        output_files['gene'], {'gene_id': int, 'gene_name': str})
 
     # looping through each file and creating the df and writing it to the csv file.
     for file in input_files['rna_sequencing']:
         rna_sequencing_df = read_data_in_data_frame(
-            file, {'id': int, 'gene_id': int, 'sequencing_id': str, 'value': str})
+            file, {'id': int, 'gene.id': str, 'sequencing.uid': str, 'value': str})
         merged_df = rna_sequencing_df.merge(
             sequencing_df, left_on='sequencing.uid', right_on='sequencing_id').merge(
                 gene_df, left_on='gene.id', right_on='gene_name')
         write_data_to_csv(
-            merged_df[['gene_id', 'sequencing_uid', 'value']], output_files['rna_sequencing'], 'id', {'gene_id': int, 'sequencing_uid': str, 'value': str})
+            merged_df[['gene_id', 'sequencing_uid', 'value']], output_files['rna_sequencing'], 'id', {'gene_id': int, 'sequencing_uid': int, 'value': str})
 
 
 def build_secondary_tables() -> NoReturn:
