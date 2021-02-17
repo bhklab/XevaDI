@@ -86,6 +86,7 @@ def write_data_to_csv(data: Union[pd.Series, pd.DataFrame], path: str, label=Non
 
     # if file does not exist write header.
     if not os.path.isfile(path):
+        data.index = np.arange(1, len(data) + 1)
         data.to_csv(path, index=index, index_label=label)
     else:  # else it exists so append without writing the header.
         last_id = read_data_in_data_frame(
