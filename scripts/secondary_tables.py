@@ -28,8 +28,6 @@ def batch_response_table(output_files: Dict, input_files: Dict) -> NoReturn:
     merged_df = batch_response_input_df.merge(
         batch_df, left_on='batch.id', right_on='batch')
 
-    merged_df.index = np.arange(1, len(merged_df) + 1)
-
     # writing the modified df to the csv file for batch_response table.
     write_data_to_csv(
         merged_df[['batch_id', 'response_type', 'value']],
@@ -60,8 +58,6 @@ def batch_information_table(output_files: Dict, input_files: Dict) -> NoReturn:
     # merging the batch information df and batch df.
     merged_df = batch_information_input_df.merge(
         batch_df, left_on='batch.id', right_on='batch').merge(model_df, left_on='model.id', right_on='model')
-
-    merged_df.index = np.arange(1, len(merged_df) + 1)
 
     # writing the modified df to the csv file for batch_information table.
     write_data_to_csv(
@@ -94,8 +90,6 @@ def model_response_table(output_files: Dict, input_files: Dict) -> NoReturn:
     merged_df = model_response_df.merge(
         drug_df, left_on='drug', right_on='drug_name').merge(model_df, left_on='model.id', right_on='model')
 
-    merged_df.index = np.arange(1, len(merged_df) + 1)
-
     # writing the modified df to the csv file for model_response table.
     write_data_to_csv(
         merged_df[['drug_id', 'model_id', 'response_type', 'value']],
@@ -126,8 +120,6 @@ def drug_screening_table(output_files: Dict, input_files: Dict) -> NoReturn:
     # merging the drug df and model df.
     merged_df = drug_screening_df.merge(
         drug_df, left_on='drug', right_on='drug_name').merge(model_df, left_on='model.id', right_on='model')
-
-    merged_df.index = np.arange(1, len(merged_df) + 1)
 
     # renaming column in the dataframe.
     merged_df.rename(columns={'volume.normal': 'volume_normal'}, inplace=True)
@@ -175,8 +167,6 @@ def model_information_table(output_files: Dict, input_files: Dict) -> NoReturn:
                     patient_df, left_on='patient.id', right_on='patient').merge(
                         dataset_df, left_on='dataset', right_on='dataset_name')
 
-    merged_df.index = np.arange(1, len(merged_df) + 1)
-
     # writing the modified df to the csv file for model_information table.
     write_data_to_csv(
         merged_df[['model_id', 'tissue_id',
@@ -209,8 +199,6 @@ def modelid_moleculardata_mapping(output_files: Dict, input_files: Dict) -> NoRe
     merged_df = modelid_moleculardata_mapping_df.merge(
         model_df, left_on='model.id', right_on='model').merge(
             sequencing_df, left_on='biobase.id', right_on='sequencing_id')
-
-    merged_df.index = np.arange(1, len(merged_df) + 1)
 
     # writing the modified df to the csv file for drug_screening table.
     write_data_to_csv(
