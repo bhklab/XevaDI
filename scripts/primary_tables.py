@@ -232,10 +232,12 @@ def model_table(path: str) -> NoReturn:
     model_output_file = f'{path}/output_data/models.csv'
 
     # concatenated data frame.
-    model_input_df = concat_data_frame(input_files)
+    model_input_df = concat_data_frame(
+        input_files, {'model.id': str, 'patient.id': str})
 
     # patient information data frame.
-    patient_df = read_data_in_data_frame(patient_file)
+    patient_df = read_data_in_data_frame(
+        patient_file, {'patient_id': int, 'patient': str})
 
     # merge the data frames.
     merged_df = model_input_df.merge(
@@ -264,8 +266,8 @@ def build_primary_tables() -> NoReturn:
     patient_table(project_path)
     gene_table(project_path)
     batch_table(project_path)
-    model_table(project_path)
     sequencing_table(project_path)
+    model_table(project_path)
 
 
 # building the primary tables.
