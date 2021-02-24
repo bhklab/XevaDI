@@ -35,7 +35,7 @@ def read_data_in_data_frame(file: str, data_type=None) -> pd.DataFrame:
 
         Arguments:
             file (str): The name of the file.
-            data_type (dict): The data type of that data that will be read with the default value None.
+            data_type (dict): The data type of the data that will be read with the default value None.
 
         Returns:
             DataFrame: returns a dataframe created from the input file.
@@ -49,7 +49,7 @@ def read_data_in_data_frame(file: str, data_type=None) -> pd.DataFrame:
             'Invalid Argument to the read_data_in_data_frame function!')
 
 
-def concat_data_frame(files: List[str]) -> pd.DataFrame:
+def concat_data_frame(files: List[str], data_type=None) -> pd.DataFrame:
     """
         This function takes the list of the input files
         and returns the concatenated dataframe that is created
@@ -57,13 +57,14 @@ def concat_data_frame(files: List[str]) -> pd.DataFrame:
 
         Arguments:
             files (list of str): List of the input files.
+            data_type (dict): The data type of the data that will be read with the default value None.
 
         Returns:
             DataFrame: returns a concatenated dataframe.
     """
     data_frames = []
     for file in files:
-        data_frames.append(read_data_in_data_frame(file))
+        data_frames.append(read_data_in_data_frame(file, data_type=data_type))
     return pd.concat(data_frames)
 
 
@@ -82,7 +83,7 @@ def write_data_to_csv(data: Union[pd.Series, pd.DataFrame], path: str, label=Non
             The function doesn't return anything.
     """
     # setting index to false if the label is None.
-    index = False if label == None else True
+    index = False if label is None else True
 
     # if file does not exist write header.
     if not os.path.isfile(path):
@@ -106,7 +107,7 @@ def create_series(data: List[str], name: str) -> pd.Series:
         name (str): The name argument for pandas.Series that gives a name to the series.
 
         Returns:
-        Series: retuns a pandas series.
+        Series: returns a pandas series.
     """
     index = np.arange(1, len(data) + 1)
     return pd.Series(data, name=name, index=index)
@@ -120,7 +121,7 @@ def create_unique_list(files: List['str'], column: str, to_upper=False, data_typ
         files (list of str): This is the list of the files to iterate through.
         column (str): the column that has to be selected from the data frame to be added to the list.
         to_upper (bool): to convert the data to upper case or not.
-        data_type (dict): the data type of the data for the unqiue list.
+        data_type (dict): the data type of the data for the unique list.
 
         Returns:
         List: return a list of the unique elements.
