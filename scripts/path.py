@@ -26,6 +26,8 @@ def get_input_files_path(path: str) -> Dict[str, list]:
         'mutation': glob.glob(f'{path}/input_data/*/mutation.*'),
         'rna_sequencing': glob.glob(f'{path}/input_data/*/rna_sequencing.*'),
         'model_sheet': f'{path}/input_data/model_sheets.csv',
+        'drug_annotation': f'{path}/input_data/drug_annotations.csv',
+        'pubchem_annotation': f'{path}/input_data/drug_annotations_1.csv',
     }
 
 
@@ -57,5 +59,6 @@ def get_output_files_path(path: str) -> Dict[str, str]:
         'copy_number_variation': f'{path}/output_data/copy_number_variation.csv',
         'rna_sequencing': f'{path}/output_data/rna_sequencing.csv',
         'modelid_moleculardata_mapping': f'{path}/output_data/modelid_moleculardata_mapping.csv',
-        'model_sheet': f'{path}/output_data/model_sheets.csv'
+        'model_sheet': f'{path}/output_data/model_sheets.csv',
+        'drug_annotation': f'{path}/output_data/drug_annotations.csv',
     }
