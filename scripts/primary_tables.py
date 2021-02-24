@@ -4,24 +4,23 @@ import re
 import pandas as pd
 import numpy as np
 import os
-from typing import List, NoReturn
+from typing import List, NoReturn, Dict
+from path import get_output_files_path, get_input_files_path
 from utils import get_project_root, read_data_in_data_frame, concat_data_frame, write_data_to_csv, create_series, comment, create_unique_list
 
 
-def dataset_table(path: str) -> NoReturn:
+def dataset_table(path: str, output_files: Dict) -> NoReturn:
     """
     This function creates a pandas data series from the dataset list
     and writes it to the csv file.
 
     Arguments:
         path(str): absolute path to the parent's parent directory.
+        output_files (dict): Contains the dictionary of the output files.
     """
 
     # comment that the dataset table is being built.
     comment('dataset')
-
-    # output file.
-    dataset_output_file = f'{path}/output_data/datasets.csv'
 
     # dataset list.
     datasets = ['PDXE (Breast Cancer)', 'PDXE (Colorectal Cancer)', 'PDXE (Cutaneous Melanoma)',
@@ -32,112 +31,106 @@ def dataset_table(path: str) -> NoReturn:
     dataset_series = create_series(datasets, 'dataset_name')
 
     # write data to the csv file.
-    write_data_to_csv(dataset_series, dataset_output_file, 'dataset_id')
+    write_data_to_csv(dataset_series, output_files['dataset'], 'dataset_id')
 
 
-def drug_table(path: str) -> NoReturn:
+def drug_table(output_files: Dict, input_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
 
     Arguments:
-        path(str): absolute path to the parent's parent directory.
+        output_files (dict): Contains the dictionary of the output files.
+        input_files (dict): Contains the dictionary of the input files.
     """
 
     # comment that the drug table is being built.
     comment('drug')
 
-    # input files to read and output file path.
-    input_files = glob.glob(f'{path}/input_data/*/drug_screening.*')
-    drug_output_file = f'{path}/output_data/drugs.csv'
-
     # data type variable containing the datatype of drug.
     data_type = {'drug': str}
 
     # unique drug list.
-    drugs = create_unique_list(input_files, 'drug', True, data_type)
+    drugs = create_unique_list(
+        input_files['drug_screening'], 'drug', True, data_type)
 
     # create the drug data frame.
     drug_series = create_series(np.unique(drugs), 'drug_name')
 
     # write data/dataframe to the csv file.
-    write_data_to_csv(drug_series, drug_output_file, 'drug_id')
+    write_data_to_csv(drug_series, output_files['drug'], 'drug_id')
 
 
-def tissue_table(path: str) -> NoReturn:
+def tissue_table(output_files: Dict, input_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
 
     Arguments:
-        path(str): absolute path to the parent's parent directory.
+        output_files (dict): Contains the dictionary of the output files.
+        input_files (dict): Contains the dictionary of the input files.
     """
 
     # comment that the tissue table is being built.
     comment('tissue')
 
-    # input files to read and output file path.
-    input_files = glob.glob(f'{path}/input_data/*/model_information.*')
-    tissue_output_file = f'{path}/output_data/tissues.csv'
-
     # data type variable containing the datatype of tissue.
     data_type = {'tissue': str}
 
     # unique tissue list.
-    tissues = create_unique_list(input_files, 'tissue', False, data_type)
+    tissues = create_unique_list(
+        input_files['model_information'], 'tissue', False, data_type)
 
     # create the tissue panda series.
     tissue_series = create_series(np.unique(tissues), 'tissue_name')
 
     # write pandas series to the csv file.
-    write_data_to_csv(tissue_series, tissue_output_file, 'tissue_id')
+    write_data_to_csv(tissue_series, output_files['tissue'], 'tissue_id')
 
 
-def patient_table(path: str) -> NoReturn:
+def patient_table(output_files: Dict, input_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
 
     Arguments:
-        path(str): absolute path to the parent's parent directory.
+        output_files (dict): Contains the dictionary of the output files.
+        input_files (dict): Contains the dictionary of the input files.
     """
 
     # comment that the patient table is being built.
     comment('patient')
 
-    # input files to read and output file path.
-    input_files = glob.glob(f'{path}/input_data/*/model_information.*')
-    patient_output_file = f'{path}/output_data/patients.csv'
-
     # data type variable containing the datatype of the patient id.
     data_type = {'patient.id': str}
 
     # unique patient list.
-    patients = create_unique_list(input_files, 'patient.id', False, data_type)
+    patients = create_unique_list(
+        input_files['model_information'], 'patient.id', False, data_type)
 
     # create the patient panda series.
     patient_series = create_series(np.unique(patients), 'patient')
 
     # write pandas series to the csv file.
-    write_data_to_csv(patient_series, patient_output_file, 'patient_id')
+    write_data_to_csv(patient_series, output_files['patient'], 'patient_id')
 
 
-def gene_table(path: str) -> NoReturn:
+def gene_table(path: str, output_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
 
     Arguments:
         path(str): absolute path to the parent's parent directory.
+        output_files (dict): Contains the dictionary of the output files.
     """
 
     # comment that the gene table is being built.
     comment('gene')
 
-    # input files to read and output file path.
+    # input files to read.
     input_files = [f for f in glob.glob(f'{path}/input_data/*/*')
                    if re.search(r'(copy_number_variation|mutation|rna_sequencing)', f)]
-    gene_output_file = f'{path}/output_data/genes.csv'
 
     # data type variable containing the datatype of gene.
     data_type = {'gene.id': str}
@@ -149,16 +142,17 @@ def gene_table(path: str) -> NoReturn:
     gene_series = create_series(np.unique(genes), 'gene_name')
 
     # write pandas series to the csv file.
-    write_data_to_csv(gene_series, gene_output_file, 'gene_id')
+    write_data_to_csv(gene_series, output_files['gene'], 'gene_id')
 
 
-def sequencing_table(path: str) -> NoReturn:
+def sequencing_table(path: str, output_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
 
     Arguments:
         path(str): absolute path to the parent's parent directory.
+        output_files (dict): Contains the dictionary of the output files.
     """
 
     # comment that the gene table is being built.
@@ -167,7 +161,6 @@ def sequencing_table(path: str) -> NoReturn:
     # input files to read and output file path.
     input_files = [f for f in glob.glob(f'{path}/input_data/*/*')
                    if re.search(r'(copy_number_variation|mutation|rna_sequencing)', f)]
-    sequencing_output_file = f'{path}/output_data/sequencing.csv'
 
     # data type variable containing the datatype of sequencing.
     data_type = {'sequencing.uid': str}
@@ -182,62 +175,56 @@ def sequencing_table(path: str) -> NoReturn:
 
     # write pandas series to the csv file.
     write_data_to_csv(sequencing_series,
-                      sequencing_output_file, 'sequencing_uid')
+                      output_files['sequencing'], 'sequencing_uid')
 
 
-def batch_table(path: str) -> NoReturn:
+def batch_table(output_files: Dict, input_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
 
     Arguments:
-        path(str): absolute path to the parent's parent directory.
+        output_files (dict): Contains the dictionary of the output files.
+        input_files (dict): Contains the dictionary of the input files.
     """
 
     # comment that the batch table is being built.
     comment('batch')
 
-    # input files to read and output file path.
-    input_files = glob.glob(f'{path}/input_data/*/batch_information.*')
-    batch_output_file = f'{path}/output_data/batches.csv'
-
     # data type variable containing the datatype of batch.
     data_type = {'batch.id': str}
 
     # batches list.
-    batches = create_unique_list(input_files, 'batch.id', False, data_type)
+    batches = create_unique_list(
+        input_files['batch_information'], 'batch.id', False, data_type)
 
     # create the batch panda series.
     batch_series = create_series(np.unique(batches), 'batch')
 
     # write pandas series to the csv file.
-    write_data_to_csv(batch_series, batch_output_file, 'batch_id')
+    write_data_to_csv(batch_series, output_files['batch'], 'batch_id')
 
 
-def model_table(path: str) -> NoReturn:
+def model_table(output_files: Dict, input_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
 
     Arguments:
-        path(str): absolute path to the parent's parent directory.
+        output_files (dict): Contains the dictionary of the output files.
+        input_files (dict): Contains the dictionary of the input files.
     """
 
     # comment that the model table is being built.
     comment('model')
 
-    # input files to read and output file path.
-    input_files = glob.glob(f'{path}/input_data/*/model_information.*')
-    patient_file = f'{path}/output_data/patients.csv'
-    model_output_file = f'{path}/output_data/models.csv'
-
     # concatenated data frame.
     model_input_df = concat_data_frame(
-        input_files, {'model.id': str, 'patient.id': str})
+        input_files['model_information'], {'model.id': str, 'patient.id': str})
 
     # patient information data frame.
     patient_df = read_data_in_data_frame(
-        patient_file, {'patient_id': int, 'patient': str})
+        output_files['patient'], {'patient_id': int, 'patient': str})
 
     # merge the data frames.
     merged_df = model_input_df.merge(
@@ -248,7 +235,7 @@ def model_table(path: str) -> NoReturn:
 
     # write pandas series to the csv file.
     write_data_to_csv(
-        merged_df[['model', 'patient_id']], model_output_file, 'model_id')
+        merged_df[['model', 'patient_id']], output_files['model'], 'model_id')
 
 
 def build_primary_tables() -> NoReturn:
@@ -259,15 +246,19 @@ def build_primary_tables() -> NoReturn:
     # get the path of the root directory.
     project_path = f'{get_project_root()}'
 
+    # get the path of the output files and the input files.
+    output_files_path = get_output_files_path(project_path)
+    input_files_path = get_input_files_path(project_path)
+
     # calling functions to create the data for primary tables.
-    dataset_table(project_path)
-    drug_table(project_path)
-    tissue_table(project_path)
-    patient_table(project_path)
-    gene_table(project_path)
-    batch_table(project_path)
-    sequencing_table(project_path)
-    model_table(project_path)
+    dataset_table(project_path, output_files_path)
+    drug_table(output_files_path, input_files_path)
+    tissue_table(output_files_path, input_files_path)
+    patient_table(output_files_path, input_files_path)
+    gene_table(project_path, output_files_path)
+    batch_table(output_files_path, input_files_path)
+    sequencing_table(project_path, output_files_path)
+    model_table(output_files_path, input_files_path)
 
 
 # building the primary tables.
