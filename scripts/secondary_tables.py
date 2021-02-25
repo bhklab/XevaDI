@@ -19,10 +19,12 @@ def batch_response_table(output_files: Dict, input_files: Dict) -> NoReturn:
     comment('batch_response')
 
     # concatenated data frame.
-    batch_response_input_df = concat_data_frame(input_files['batch_response'])
+    batch_response_input_df = concat_data_frame(
+        input_files['batch_response'], {'batch.id': str, 'response_type': str, 'value': float})
 
     # batch data frame.
-    batch_df = read_data_in_data_frame(output_files['batch'])
+    batch_df = read_data_in_data_frame(
+        output_files['batch'], {'batch_id': int, 'batch': str})
 
     # merging the batch response df and batch df.
     merged_df = batch_response_input_df.merge(
@@ -31,7 +33,9 @@ def batch_response_table(output_files: Dict, input_files: Dict) -> NoReturn:
     # writing the modified df to the csv file for batch_response table.
     write_data_to_csv(
         merged_df[['batch_id', 'response_type', 'value']],
-        output_files['batch_response'], 'id')
+        output_files['batch_response'], 'id', {
+            'batch_id': int, 'response_type': str, 'value': float}
+    )
 
 
 def batch_information_table(output_files: Dict, input_files: Dict) -> NoReturn:
@@ -48,12 +52,14 @@ def batch_information_table(output_files: Dict, input_files: Dict) -> NoReturn:
     comment('batch_information')
 
     # concatenated data frame.
-    batch_information_input_df = concat_data_frame(
-        input_files['batch_information'])
+    batch_information_input_df = concat_data_frame(input_files['batch_information'], {
+        'batch.id': str, 'model.id': str, 'type': str})
 
     # batch and model data frame.
-    batch_df = read_data_in_data_frame(output_files['batch'])
-    model_df = read_data_in_data_frame(output_files['model'])
+    batch_df = read_data_in_data_frame(
+        output_files['batch'], {'batch_id': int, 'batch': str})
+    model_df = read_data_in_data_frame(
+        output_files['model'], {'model_id': int, 'model': str, 'patient_id': int})
 
     # merging the batch information df and batch df.
     merged_df = batch_information_input_df.merge(
@@ -62,7 +68,7 @@ def batch_information_table(output_files: Dict, input_files: Dict) -> NoReturn:
     # writing the modified df to the csv file for batch_information table.
     write_data_to_csv(
         merged_df[['batch_id', 'model_id', 'type']],
-        output_files['batch_information'], 'id')
+        output_files['batch_information'], 'id', {'batch_id': int, 'model_id': int, 'type': str})
 
 
 def model_response_table(output_files: Dict, input_files: Dict) -> NoReturn:
@@ -79,12 +85,15 @@ def model_response_table(output_files: Dict, input_files: Dict) -> NoReturn:
     comment('model_response')
 
     # concatenated data frame.
-    model_response_df = concat_data_frame(input_files['model_response'])
+    model_response_df = concat_data_frame(
+        input_files['model_response'], {'drug': str, 'model.id': str, 'response_type': str, 'value': str})
     model_response_df['drug'] = model_response_df['drug'].str.upper()
 
     # drug and model data frame.
-    drug_df = read_data_in_data_frame(output_files['drug'])
-    model_df = read_data_in_data_frame(output_files['model'])
+    drug_df = read_data_in_data_frame(
+        output_files['drug'], {'drug_id': int, 'drug_name': str})
+    model_df = read_data_in_data_frame(
+        output_files['model'], {'model_id': int, 'model': str, 'patient_id': int})
 
     # merging the drug df and model df.
     merged_df = model_response_df.merge(
@@ -93,7 +102,7 @@ def model_response_table(output_files: Dict, input_files: Dict) -> NoReturn:
     # writing the modified df to the csv file for model_response table.
     write_data_to_csv(
         merged_df[['drug_id', 'model_id', 'response_type', 'value']],
-        output_files['model_response'], 'id')
+        output_files['model_response'], 'id', {'drug_id': int, 'model_id': int, 'response_type': str, 'value': str})
 
 
 def drug_screening_table(output_files: Dict, input_files: Dict) -> NoReturn:
@@ -110,12 +119,15 @@ def drug_screening_table(output_files: Dict, input_files: Dict) -> NoReturn:
     comment('drug_screening')
 
     # concatenated data frame.
-    drug_screening_df = concat_data_frame(input_files['drug_screening'])
+    drug_screening_df = concat_data_frame(input_files['drug_screening'], {
+                                          'model.id': str, 'drug': str, 'time': int, 'volumne': float, 'volume.normal': float})
     drug_screening_df['drug'] = drug_screening_df['drug'].str.upper()
 
     # drug and model data frame.
-    drug_df = read_data_in_data_frame(output_files['drug'])
-    model_df = read_data_in_data_frame(output_files['model'])
+    drug_df = read_data_in_data_frame(
+        output_files['drug'], {'drug_id': int, 'drug_name': str})
+    model_df = read_data_in_data_frame(
+        output_files['model'], {'model_id': int, 'model': str, 'patient_id': int})
 
     # merging the drug df and model df.
     merged_df = drug_screening_df.merge(
@@ -127,7 +139,7 @@ def drug_screening_table(output_files: Dict, input_files: Dict) -> NoReturn:
     # writing the modified df to the csv file for drug_screening table.
     write_data_to_csv(
         merged_df[['drug_id', 'model_id', 'time', 'volume', 'volume_normal']],
-        output_files['drug_screening'], 'id')
+        output_files['drug_screening'], 'id', {'drug_id': int, 'model_id': int, 'time': int, 'volume': float, 'volume_normal': float})
 
 
 def model_information_table(output_files: Dict, input_files: Dict) -> NoReturn:
@@ -144,7 +156,8 @@ def model_information_table(output_files: Dict, input_files: Dict) -> NoReturn:
     comment('model_information')
 
     # concatenated data frame.
-    model_information_df = concat_data_frame(input_files['model_information'])
+    model_information_df = concat_data_frame(
+        input_files['model_information'], {'model.id': str, 'tissue': str, 'patient.id': str, 'drug': str, 'dataset': str})
     model_information_df['drug'] = model_information_df['drug'].str.upper()
 
     # update if the dataset name is 'TNBC' to 'UHN (Breast Cancer)'
@@ -152,12 +165,16 @@ def model_information_table(output_files: Dict, input_files: Dict) -> NoReturn:
         'TNBC', 'UHN (Breast Cancer)')
 
     # drug and model data frame.
-    drug_df = read_data_in_data_frame(output_files['drug'])
-    model_df = read_data_in_data_frame(output_files['model'])[
-        ['model_id', 'model']]
-    dataset_df = read_data_in_data_frame(output_files['dataset'])
-    tissue_df = read_data_in_data_frame(output_files['tissue'])
-    patient_df = read_data_in_data_frame(output_files['patient'])
+    drug_df = read_data_in_data_frame(
+        output_files['drug'], {'drug_id': int, 'drug_name': str})
+    model_df = read_data_in_data_frame(output_files['model'], {
+                                       'model_id': int, 'model': str, 'patient_id': int})[['model_id', 'model']]
+    dataset_df = read_data_in_data_frame(
+        output_files['dataset'], {'dataset_id': int, 'dataset_name': str})
+    tissue_df = read_data_in_data_frame(
+        output_files['tissue'], {'tissue_id': int, 'tissue_name': str})
+    patient_df = read_data_in_data_frame(
+        output_files['patient'], {'patient_id': int, 'patient': str})
 
     # merged df.
     merged_df = model_information_df.merge(
@@ -171,7 +188,7 @@ def model_information_table(output_files: Dict, input_files: Dict) -> NoReturn:
     write_data_to_csv(
         merged_df[['model_id', 'tissue_id',
                    'patient_id', 'drug_id', 'dataset_id']],
-        output_files['model_information'], 'id')
+        output_files['model_information'], 'id', {'model_id': int, 'tissue_id': int, 'patient_id': int, 'drug_id': int, 'dataset_id': int})
 
 
 def modelid_moleculardata_mapping(output_files: Dict, input_files: Dict) -> NoReturn:
@@ -192,8 +209,10 @@ def modelid_moleculardata_mapping(output_files: Dict, input_files: Dict) -> NoRe
         input_files['modelid_moleculardata_mapping'])
 
     # sequencing and gene data frame.
-    sequencing_df = read_data_in_data_frame(output_files['sequencing'])
-    model_df = read_data_in_data_frame(output_files['model'])
+    sequencing_df = read_data_in_data_frame(output_files['sequencing'], {
+                                            'sequencing_uid': int, 'sequencing_id': str})
+    model_df = read_data_in_data_frame(output_files['model'], {
+                                       'model_id': int, 'model': str, 'patient_id': int})[['model_id', 'model']]
 
     # merging dfs.
     merged_df = modelid_moleculardata_mapping_df.merge(
@@ -203,7 +222,7 @@ def modelid_moleculardata_mapping(output_files: Dict, input_files: Dict) -> NoRe
     # writing the modified df to the csv file for drug_screening table.
     write_data_to_csv(
         merged_df[['model_id', 'sequencing_uid', 'mDataType']],
-        output_files['modelid_moleculardata_mapping'], 'id')
+        output_files['modelid_moleculardata_mapping'], 'id', {'model_id': int, 'sequencing_uid': int, 'mDataType': str})
 
 
 def mutation(output_files: Dict, input_files: Dict) -> NoReturn:
