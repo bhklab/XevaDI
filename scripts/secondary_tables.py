@@ -206,7 +206,7 @@ def modelid_moleculardata_mapping(output_files: Dict, input_files: Dict) -> NoRe
 
     # concatenated data frame.
     modelid_moleculardata_mapping_df = concat_data_frame(
-        input_files['modelid_moleculardata_mapping'])
+        input_files['modelid_moleculardata_mapping'], {'model.id': str, 'biobase.id': str, 'mDataType': str})
 
     # sequencing and gene data frame.
     sequencing_df = read_data_in_data_frame(output_files['sequencing'], {
