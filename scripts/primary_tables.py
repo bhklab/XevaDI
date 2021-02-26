@@ -1,21 +1,16 @@
 import glob
-import pathlib
 import re
-import pandas as pd
 import numpy as np
-import os
-from typing import List, NoReturn, Dict
-from path import get_output_files_path, get_input_files_path
-from utils import get_project_root, read_data_in_data_frame, concat_data_frame, write_data_to_csv, create_series, comment, create_unique_list
+from typing import NoReturn, Dict
+from utils import read_data_in_data_frame, concat_data_frame, write_data_to_csv, create_series, comment, create_unique_list
 
 
-def dataset_table(path: str, output_files: Dict) -> NoReturn:
+def dataset_table(output_files: Dict) -> NoReturn:
     """
     This function creates a pandas data series from the dataset list
     and writes it to the csv file.
 
     Arguments:
-        path(str): absolute path to the parent's parent directory.
         output_files (dict): Contains the dictionary of the output files.
     """
 
@@ -34,14 +29,14 @@ def dataset_table(path: str, output_files: Dict) -> NoReturn:
     write_data_to_csv(dataset_series, output_files['dataset'], 'dataset_id')
 
 
-def drug_table(output_files: Dict, input_files: Dict) -> NoReturn:
+def drug_table(input_files: Dict, output_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
 
     Arguments:
-        output_files (dict): Contains the dictionary of the output files.
         input_files (dict): Contains the dictionary of the input files.
+        output_files (dict): Contains the dictionary of the output files.
     """
 
     # comment that the drug table is being built.
@@ -61,14 +56,14 @@ def drug_table(output_files: Dict, input_files: Dict) -> NoReturn:
     write_data_to_csv(drug_series, output_files['drug'], 'drug_id')
 
 
-def tissue_table(output_files: Dict, input_files: Dict) -> NoReturn:
+def tissue_table(input_files: Dict, output_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
 
     Arguments:
-        output_files (dict): Contains the dictionary of the output files.
         input_files (dict): Contains the dictionary of the input files.
+        output_files (dict): Contains the dictionary of the output files.
     """
 
     # comment that the tissue table is being built.
@@ -88,14 +83,14 @@ def tissue_table(output_files: Dict, input_files: Dict) -> NoReturn:
     write_data_to_csv(tissue_series, output_files['tissue'], 'tissue_id')
 
 
-def patient_table(output_files: Dict, input_files: Dict) -> NoReturn:
+def patient_table(input_files: Dict, output_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
 
     Arguments:
-        output_files (dict): Contains the dictionary of the output files.
         input_files (dict): Contains the dictionary of the input files.
+        output_files (dict): Contains the dictionary of the output files.
     """
 
     # comment that the patient table is being built.
@@ -178,14 +173,14 @@ def sequencing_table(path: str, output_files: Dict) -> NoReturn:
                       output_files['sequencing'], 'sequencing_uid')
 
 
-def batch_table(output_files: Dict, input_files: Dict) -> NoReturn:
+def batch_table(input_files: Dict, output_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
 
     Arguments:
-        output_files (dict): Contains the dictionary of the output files.
         input_files (dict): Contains the dictionary of the input files.
+        output_files (dict): Contains the dictionary of the output files.
     """
 
     # comment that the batch table is being built.
@@ -205,14 +200,14 @@ def batch_table(output_files: Dict, input_files: Dict) -> NoReturn:
     write_data_to_csv(batch_series, output_files['batch'], 'batch_id')
 
 
-def model_table(output_files: Dict, input_files: Dict) -> NoReturn:
+def model_table(input_files: Dict, output_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
 
     Arguments:
-        output_files (dict): Contains the dictionary of the output files.
         input_files (dict): Contains the dictionary of the input files.
+        output_files (dict): Contains the dictionary of the output files.
     """
 
     # comment that the model table is being built.
@@ -236,30 +231,3 @@ def model_table(output_files: Dict, input_files: Dict) -> NoReturn:
     # write pandas series to the csv file.
     write_data_to_csv(
         merged_df[['model', 'patient_id']], output_files['model'], 'model_id')
-
-
-def build_primary_tables() -> NoReturn:
-    """
-    This function builds all the primary tables in the database.
-    """
-
-    # get the path of the root directory.
-    project_path = f'{get_project_root()}'
-
-    # get the path of the output files and the input files.
-    output_files_path = get_output_files_path(project_path)
-    input_files_path = get_input_files_path(project_path)
-
-    # calling functions to create the data for primary tables.
-    dataset_table(project_path, output_files_path)
-    drug_table(output_files_path, input_files_path)
-    tissue_table(output_files_path, input_files_path)
-    patient_table(output_files_path, input_files_path)
-    gene_table(project_path, output_files_path)
-    batch_table(output_files_path, input_files_path)
-    sequencing_table(project_path, output_files_path)
-    model_table(output_files_path, input_files_path)
-
-
-# building the primary tables.
-build_primary_tables()
