@@ -1,5 +1,5 @@
 from path import get_output_files_path, get_input_files_path
-from scripts.secondary_tables import batch_response_table, batch_information_table, model_response_table, \
+from secondary_tables import batch_response_table, batch_information_table, model_response_table, \
     drug_screening_table, model_information_table, modelid_moleculardata_mapping, mutation, copy_number_variation, \
     rna_sequencing
 from utils import get_project_root
