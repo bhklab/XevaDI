@@ -6,7 +6,7 @@ from path import get_output_files_path, get_input_files_path
 from typing import NoReturn, Dict
 
 
-def batch_response_table(output_files: Dict, input_files: Dict) -> NoReturn:
+def batch_response_table(input_files: Dict, output_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
@@ -38,7 +38,7 @@ def batch_response_table(output_files: Dict, input_files: Dict) -> NoReturn:
     )
 
 
-def batch_information_table(output_files: Dict, input_files: Dict) -> NoReturn:
+def batch_information_table(input_files: Dict, output_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
@@ -71,7 +71,7 @@ def batch_information_table(output_files: Dict, input_files: Dict) -> NoReturn:
         output_files['batch_information'], 'id', {'batch_id': int, 'model_id': int, 'type': str})
 
 
-def model_response_table(output_files: Dict, input_files: Dict) -> NoReturn:
+def model_response_table(input_files: Dict, output_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
@@ -105,7 +105,7 @@ def model_response_table(output_files: Dict, input_files: Dict) -> NoReturn:
         output_files['model_response'], 'id', {'drug_id': int, 'model_id': int, 'response_type': str, 'value': str})
 
 
-def drug_screening_table(output_files: Dict, input_files: Dict) -> NoReturn:
+def drug_screening_table(input_files: Dict, output_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
@@ -142,7 +142,7 @@ def drug_screening_table(output_files: Dict, input_files: Dict) -> NoReturn:
         output_files['drug_screening'], 'id', {'drug_id': int, 'model_id': int, 'time': int, 'volume': float, 'volume_normal': float})
 
 
-def model_information_table(output_files: Dict, input_files: Dict) -> NoReturn:
+def model_information_table(input_files: Dict, output_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
@@ -191,7 +191,7 @@ def model_information_table(output_files: Dict, input_files: Dict) -> NoReturn:
         output_files['model_information'], 'id', {'model_id': int, 'tissue_id': int, 'patient_id': int, 'drug_id': int, 'dataset_id': int})
 
 
-def modelid_moleculardata_mapping(output_files: Dict, input_files: Dict) -> NoReturn:
+def modelid_moleculardata_mapping(input_files: Dict, output_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
@@ -225,7 +225,7 @@ def modelid_moleculardata_mapping(output_files: Dict, input_files: Dict) -> NoRe
         output_files['modelid_moleculardata_mapping'], 'id', {'model_id': int, 'sequencing_uid': int, 'mDataType': str})
 
 
-def mutation(output_files: Dict, input_files: Dict) -> NoReturn:
+def mutation(input_files: Dict, output_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
@@ -255,7 +255,7 @@ def mutation(output_files: Dict, input_files: Dict) -> NoReturn:
             merged_df[['gene_id', 'sequencing_uid', 'value']], output_files['mutation'], 'id', {'gene_id': int, 'sequencing_uid': int, 'value': str})
 
 
-def copy_number_variation(output_files: Dict, input_files: Dict) -> NoReturn:
+def copy_number_variation(input_files: Dict, output_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
@@ -285,7 +285,7 @@ def copy_number_variation(output_files: Dict, input_files: Dict) -> NoReturn:
             merged_df[['gene_id', 'sequencing_uid', 'value']], output_files['copy_number_variation'], 'id', {'gene_id': int, 'sequencing_uid': int, 'value': str})
 
 
-def rna_sequencing(output_files: Dict, input_files: Dict) -> NoReturn:
+def rna_sequencing(input_files: Dict, output_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
@@ -313,26 +313,3 @@ def rna_sequencing(output_files: Dict, input_files: Dict) -> NoReturn:
                 gene_df, left_on='gene.id', right_on='gene_name')
         write_data_to_csv(
             merged_df[['gene_id', 'sequencing_uid', 'value']], output_files['rna_sequencing'], 'id', {'gene_id': int, 'sequencing_uid': int, 'value': str})
-
-
-def build_secondary_tables() -> NoReturn:
-    # get the path of the root directory.
-    project_path = f'{get_project_root()}'
-
-    # get the path of the output files and the input files.
-    output_files_path = get_output_files_path(project_path)
-    input_files_path = get_input_files_path(project_path)
-
-    # calling the functions to make the secondary tables.s
-    batch_response_table(output_files_path, input_files_path)
-    batch_information_table(output_files_path, input_files_path)
-    model_response_table(output_files_path, input_files_path)
-    drug_screening_table(output_files_path, input_files_path)
-    model_information_table(output_files_path, input_files_path)
-    modelid_moleculardata_mapping(output_files_path, input_files_path)
-    mutation(output_files_path, input_files_path)
-    copy_number_variation(output_files_path, input_files_path)
-    rna_sequencing(output_files_path, input_files_path)
-
-
-build_secondary_tables()
