@@ -1,20 +1,16 @@
-import glob
 import os
-import pandas as pd
-import numpy as np
-from utils import get_project_root, read_data_in_data_frame, concat_data_frame, write_data_to_csv, comment
+from utils import read_data_in_data_frame, write_data_to_csv, comment
 from typing import NoReturn, Dict
-from path import get_output_files_path, get_input_files_path
 
 
-def drug_annotation_table(output_files: Dict, input_files: Dict) -> NoReturn:
+def drug_annotation_table(input_files: Dict, output_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
     and write it to the csv file.
 
     Arguments:
-        output_files (dict): Contains the dictionary of the output files.
         input_files (dict): Contains the dictionary of the input files.
+        output_files (dict): Contains the dictionary of the output files.
     """
 
     # comment
@@ -41,7 +37,7 @@ def drug_annotation_table(output_files: Dict, input_files: Dict) -> NoReturn:
         annotation_df, left_on='drug_name', right_on='Drug-Name', how='left').merge(
         annotation_df_with_pubchem, left_on='drug_name', right_on='Drug-Name', how='left')
 
-    # renamining the columns for the final output.
+    # renaming the columns for the final output.
     merged_df.rename(columns={'Standard-Name (PubChem)': 'standard_name', 'Targets': 'targets', 'Treatment.type': 'treatment_type',
                               'Class': 'class', 'Class Names': 'class_name', 'Source': 'source'}, inplace=True)
 
@@ -53,19 +49,3 @@ def drug_annotation_table(output_files: Dict, input_files: Dict) -> NoReturn:
             output_files['drug_annotation'])
     else:
         raise ValueError('Drug annotation file is already present!')
-
-
-def build_annotation_tables() -> NoReturn:
-    # get the path of the root directory.
-    project_path = f'{get_project_root()}'
-
-    # get the path of the output files and the input files.
-    output_files_path = get_output_files_path(project_path)
-    input_files_path = get_input_files_path(project_path)
-
-    # creating annotation table(s).
-    drug_annotation_table(output_files_path, input_files_path)
-
-
-# building annotation tables.
-build_annotation_tables()
