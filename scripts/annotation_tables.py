@@ -1,6 +1,17 @@
 import os
+import pandas as pd
 from utils import read_data_in_data_frame, write_data_to_csv, comment
-from typing import NoReturn, Dict
+from typing import NoReturn, Dict, List
+
+
+def get_pubchem_id(data: pd.Series, split_by: str) -> List['str']:
+    pubchem_ids = []
+    for i in data.str.split(split_by):
+        if type(i) is list:
+            pubchem_ids.append(i[-1])
+        else:
+            pubchem_ids.append('')
+    return pubchem_ids
 
 
 def drug_annotation_table(input_files: Dict, output_files: Dict) -> NoReturn:
@@ -26,6 +37,9 @@ def drug_annotation_table(input_files: Dict, output_files: Dict) -> NoReturn:
     annotation_df['Drug-Name'] = annotation_df['Drug-Name'].str.upper()
     annotation_df_with_pubchem['Drug-Name'] = annotation_df_with_pubchem['Drug-Name'].str.upper()
 
+    annotation_df_with_pubchem['PubchemID'] = get_pubchem_id(
+        annotation_df_with_pubchem['PubchemID'], split_by='/')
+
     # selecting the required columns.
     annotation_df = annotation_df[[
         'Drug-Name', 'Targets', 'Treatment.type', 'Class', 'Class Names', 'Source']]
@@ -39,13 +53,13 @@ def drug_annotation_table(input_files: Dict, output_files: Dict) -> NoReturn:
 
     # renaming the columns for the final output.
     merged_df.rename(columns={'Standard-Name (PubChem)': 'standard_name', 'Targets': 'targets', 'Treatment.type': 'treatment_type',
-                              'Class': 'class', 'Class Names': 'class_name', 'Source': 'source'}, inplace=True)
+                              'Class': 'class', 'Class Names': 'class_name', 'PubchemID': 'pubchemid'}, inplace=True)
 
     # writing the modified df to the csv file for drug_annotations table.
     if not os.path.isfile(output_files['drug_annotation']):
         write_data_to_csv(
             merged_df[['drug_id', 'standard_name', 'targets',
-                       'treatment_type', 'class', 'class_name', 'source']],
+                       'treatment_type', 'class', 'class_name', 'pubchemid']],
             output_files['drug_annotation'])
     else:
         raise ValueError('Drug annotation file is already present!')
