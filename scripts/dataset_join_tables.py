@@ -3,6 +3,19 @@ from utils import get_project_root, read_data_in_data_frame, concat_data_frame, 
 from typing import NoReturn, Dict
 
 
+def model_information_df(data: Dict) -> pd.DataFrame:
+    """
+    This function creates the data frame for model information data.
+
+    Arguments:
+        data (dict): Contains the dictionary of the input files.
+
+    Returns:
+        DataFrame: returns the concatenated dataframe of the model_information data.
+    """
+    return concat_data_frame(data['model_information'], {'patient.id': str, 'dataset': str}).replace('TNBC', 'UHN (Breast Cancer)')
+
+
 def datasets_patients_table(input_files: Dict, output_files: Dict) -> NoReturn:
     """
     This function creates the data frame from the input files, concatenates them
@@ -15,11 +28,6 @@ def datasets_patients_table(input_files: Dict, output_files: Dict) -> NoReturn:
     # comment.
     comment('datasets_patients')
 
-    # concatenated data frame.
-    model_information_input_df = concat_data_frame(
-        input_files['model_information'], {'patient.id': str, 'dataset': str}).replace(
-        'TNBC', 'UHN (Breast Cancer)')
-
     # patient data frame.
     patient_df = read_data_in_data_frame(
         output_files['patient'], {'patient_id': int, 'patient': str})
@@ -29,7 +37,7 @@ def datasets_patients_table(input_files: Dict, output_files: Dict) -> NoReturn:
         output_files['dataset'], {'dataset_id': int, 'dataset': str})
 
     # merge model information data frame with dataset and patient data frame.
-    merged_df = model_information_input_df.merge(
+    merged_df = model_information_df(input_files).merge(
         patient_df, left_on='patient.id', right_on='patient').merge(
             dataset_df, left_on='dataset', right_on='dataset_name')
 
@@ -54,11 +62,6 @@ def datasets_tissues_table(input_files: Dict, output_files: Dict) -> NoReturn:
     # comment.
     comment('datasets_tissues')
 
-    # concatenated data frame.
-    model_information_input_df = concat_data_frame(
-        input_files['model_information'], {'patient.id': str, 'dataset': str}).replace(
-        'TNBC', 'UHN (Breast Cancer)')
-
     # tissue data frame.
     tissue_df = read_data_in_data_frame(
         output_files['tissue'], {'tissue_id': int, 'tissue_name': str})
@@ -68,7 +71,7 @@ def datasets_tissues_table(input_files: Dict, output_files: Dict) -> NoReturn:
         output_files['dataset'], {'dataset_id': int, 'dataset': str})
 
     # merge model information data frame with dataset and tissue data frame.
-    merged_df = model_information_input_df.merge(
+    merged_df = model_information_df(input_files).merge(
         tissue_df, left_on='tissue', right_on='tissue_name').merge(
             dataset_df, left_on='dataset', right_on='dataset_name')
 
@@ -93,11 +96,6 @@ def datasets_drugs_table(input_files: Dict, output_files: Dict) -> NoReturn:
     # comment.
     comment('datasets_drugs')
 
-    # concatenated data frame.
-    model_information_input_df = concat_data_frame(
-        input_files['model_information'], {'patient.id': str, 'dataset': str}).replace(
-        'TNBC', 'UHN (Breast Cancer)')
-
     # drug data frame.
     drug_df = read_data_in_data_frame(
         output_files['drug'], {'drug_id': int, 'drug_name': str})
@@ -107,7 +105,7 @@ def datasets_drugs_table(input_files: Dict, output_files: Dict) -> NoReturn:
         output_files['dataset'], {'dataset_id': int, 'dataset': str})
 
     # merge model information data frame with dataset and drug data frame.
-    merged_df = model_information_input_df.merge(
+    merged_df = model_information_df(input_files).merge(
         drug_df, left_on='drug', right_on='drug_name').merge(
             dataset_df, left_on='dataset', right_on='dataset_name')
 
