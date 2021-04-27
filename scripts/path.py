@@ -61,4 +61,7 @@ def get_output_files_path(path: str) -> Dict[str, str]:
         'model_sheet': f'{path}/model_sheets.csv',
         'drug_annotation': f'{path}/drug_annotations.csv',
         'dataset_patient': f'{path}/datasets_patients.csv',
+        'dataset_tissue': f'{path}/datasets_tissues.csv',
+        'dataset_drug': f'{path}/datasets_drugs.csv',
+        'dataset_gene': f'{path}/datasets_genes.csv',
     }
