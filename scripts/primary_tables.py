@@ -96,18 +96,31 @@ def patient_table(input_files: Dict, output_files: Dict) -> NoReturn:
     # comment that the patient table is being built.
     comment('patient')
 
-    # data type variable containing the datatype of the patient id.
-    data_type = {'patient.id': str}
+    # dataset dataframe.
+    dataset_df = read_data_in_data_frame(
+        output_files['dataset'], {'dataset_id': int, 'dataset': str})
 
-    # unique patient list.
-    patients = create_unique_list(
-        input_files['model_information'], 'patient.id', False, data_type)
+    # data type variable.
+    data_type = {'patient.id': str, 'dataset': str}
 
-    # create the patient panda series.
-    patient_series = create_series(np.unique(patients), 'patient')
+    # model information dataframe.
+    model_information_df = concat_data_frame(
+        input_files['model_information'], data_type).replace('TNBC', 'UHN (Breast Cancer)')
 
-    # write pandas series to the csv file.
-    write_data_to_csv(patient_series, output_files['patient'], 'patient_id')
+    # merged data frame.
+    merged_df = model_information_df.merge(
+        dataset_df, left_on='dataset', right_on='dataset_name')
+
+    # final datafrane after droping the duplicates and sorting the values.
+    final_df = merged_df.drop_duplicates(['patient.id', 'dataset_id'])[[
+        'patient.id', 'dataset_id']].sort_values(by=['patient.id', 'dataset_id'])
+
+    # renaming patient.id column to patient.
+    final_df.rename(columns={'patient.id': 'patient'}, inplace=True)
+
+    # writing the modified df to the csv file for datasets_patients table.
+    write_data_to_csv(
+        final_df, output_files['patient'], 'patient_id', data_type={'patient': str, 'dataset_id': int})
 
 
 def gene_table(path: str, output_files: Dict) -> NoReturn:
