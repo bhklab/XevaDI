@@ -174,7 +174,7 @@ def model_information_table(input_files: Dict, output_files: Dict) -> NoReturn:
     tissue_df = read_data_in_data_frame(
         output_files['tissue'], {'tissue_id': int, 'tissue_name': str})
     patient_df = read_data_in_data_frame(
-        output_files['patient'], {'patient_id': int, 'patient': str})
+        output_files['patient'], {'patient_id': int, 'patient': str})[['patient_id', 'patient']]
 
     # merged df.
     merged_df = model_information_df.merge(
