@@ -70,8 +70,12 @@ def datasets_drugs_table(input_files: Dict, output_files: Dict) -> NoReturn:
     dataset_df = read_data_in_data_frame(
         output_files['dataset'], {'dataset_id': int, 'dataset': str})
 
+    # model information df.
+    model_information = model_information_df(input_files)
+    model_information['drug'] = model_information['drug'].str.upper()
+
     # merge model information data frame with dataset and drug data frame.
-    merged_df = model_information_df(input_files).merge(
+    merged_df = model_information.merge(
         drug_df, left_on='drug', right_on='drug_name').merge(
             dataset_df, left_on='dataset', right_on='dataset_name')
 
