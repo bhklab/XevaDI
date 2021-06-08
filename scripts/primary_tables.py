@@ -141,7 +141,7 @@ def gene_table(path: str, output_files: Dict) -> NoReturn:
                    if re.search(r'(copy_number_variation|mutation|rna_sequencing)', f)]
 
     # data type variable containing the datatype of gene.
-    data_type = {'gene.id': str}
+    data_type = {'gene.id': str, 'sequencing.uid': str, 'value': str}
 
     # unique gene list.
     genes = create_unique_list(input_files, 'gene.id', False, data_type)
@@ -150,7 +150,8 @@ def gene_table(path: str, output_files: Dict) -> NoReturn:
     gene_series = create_series(np.unique(genes), 'gene_name')
 
     # write pandas series to the csv file.
-    write_data_to_csv(gene_series, output_files['gene'], 'gene_id')
+    write_data_to_csv(gene_series, output_files['gene'], 'gene_id', data_type={
+                      'gene_name': str})
 
 
 def sequencing_table(path: str, output_files: Dict) -> NoReturn:
