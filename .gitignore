@@ -2,12 +2,9 @@
 .DS_Store
 .env
 
-# ignore all the input and output data except for publically avaible pdxe dataset.
-input_data/McGill_TNBC
-input_data/TNBC
-
-# all the output data.
-output_data/*
+# ignore all the input and output data.
+output_data
+input_data
 
 # ignoring the initial csv files for cnv, mutation and rna.
 input_data/*/copy_number_variation.*
@@ -17,4 +14,3 @@ input_data/*/rna_sequencing.*
 # ignoring the final csv files for cnv, mutation and rna.
 output_data/copy_number_variation.*
 output_data/mutation.*
-output_data/rna_sequencing.*
