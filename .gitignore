@@ -3,8 +3,8 @@
 .env
 
 # ignore all the input and output data.
-output_data
-input_data
+output_data/
+input_data/
 
 # ignoring the initial csv files for cnv, mutation and rna.
 input_data/*/copy_number_variation.*
