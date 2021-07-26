@@ -19,6 +19,10 @@ def model_sheets_table(input_files: Dict, output_files: Dict) -> NoReturn:
     # model sheet data frame.
     sheets_df = read_data_in_data_frame(input_files['model_sheet'])
 
+    # renaming the columns for the final output.
+    sheets_df.rename(columns={'model.id': 'model_id',
+                              'file.url': 'link'}, inplace=True)
+
     # write data to the csv file.
     if not os.path.isfile(output_files['model_sheet']):
         write_data_to_csv(
