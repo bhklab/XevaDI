@@ -17,7 +17,7 @@ project_path = f'{get_project_root()}'
 
 # input files and output files directory.
 input_data_path = f'{project_path}/input_data'
-output_data_path = f'{project_path}/output_datas'
+output_data_path = f'{project_path}/output_data'
 
 # raise an error if the input files' directory is not present.
 if not Path(input_data_path).is_dir():
