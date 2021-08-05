@@ -20,7 +20,7 @@ def dataset_table(output_files: Dict) -> NoReturn:
     # dataset list.
     datasets = ['PDXE (Breast Cancer)', 'PDXE (Colorectal Cancer)', 'PDXE (Cutaneous Melanoma)',
                 'PDXE (Gastric Cancer)', 'PDXE (Non-small Cell Lung Carcinoma)', 'PDXE (Pancreatic Ductal Carcinoma)',
-                'UHN (Breast Cancer)', 'McGill (Breast Cancer)']
+                'UHN (Breast Cancer)', 'McGill TNBC']
 
     # create dataset series.
     dataset_series = create_series(datasets, 'dataset_name')
