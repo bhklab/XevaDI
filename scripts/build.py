@@ -10,7 +10,7 @@ from annotation_tables import drug_annotation_table
 from model_sheets import model_sheets_table
 from dataset_join_tables import datasets_tissues_table, datasets_drugs_table, \
     datasets_genes_table
-
+from biomarker_table import gene_drug_tissue_table
 
 # get the path of the root directory.
 project_path = f'{get_project_root()}'
@@ -67,3 +67,6 @@ rna_sequencing(input_files_dict, output_files_dict)
 
 # creating model sheets table.
 model_sheets_table(input_files_dict, output_files_dict)
+
+# creating biomarker table.
+gene_drug_tissue_table(input_files_dict, output_files_dict)
