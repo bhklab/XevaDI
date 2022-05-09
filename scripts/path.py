@@ -27,6 +27,7 @@ def get_input_files_path(path: str) -> Dict[str, list]:
         'model_sheet': f'{path}/TNBC/model_information_FileLink.csv',
         'drug_annotation': f'{path}/drug_annotations.csv',
         'pubchem_annotation': f'{path}/drug_annotations_1.csv',
+        'gene_drug_tissue': glob.glob(f'{path}/BiomarkerData/**', recursive=True)
     }
 
 
@@ -64,4 +65,5 @@ def get_output_files_path(path: str) -> Dict[str, str]:
         'dataset_tissue': f'{path}/datasets_tissues.csv',
         'dataset_drug': f'{path}/datasets_drugs.csv',
         'dataset_gene': f'{path}/datasets_genes.csv',
+        'gene_drug_tissue': f'{path}/gene_drug_tissue.csv',
     }
