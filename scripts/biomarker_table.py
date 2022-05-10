@@ -50,7 +50,8 @@ def gene_drug_tissue_table(input_files: Dict, output_files: Dict) -> NoReturn:
 
             # renaming columns
             merged_df.rename(
-                columns={'CI_lower': 'ci_lower', 'CI_upper': 'ci_upper'}
+                columns={'CI_lower': 'ci_lower', 'CI_upper': 'ci_upper'},
+                inplace=True
             )
 
             # write data to the csv file
