@@ -48,17 +48,24 @@ def gene_drug_tissue_table(input_files: Dict, output_files: Dict) -> NoReturn:
                 gene_df, left_on='gene', right_on='gene_name').merge(
                 dataset_df, left_on='dataset', right_on='dataset_name').round(6)
 
+            # renaming columns
+            merged_df.rename(
+                columns={'CI_lower': 'ci_lower', 'CI_upper': 'ci_upper'}
+            )
+
             # write data to the csv file
             print(f'Writing File -----> {file}\n')
 
             # write data to the csv file
             write_data_to_csv(
-                merged_df[['gene_id', 'drug_id', 'tissue_id', 'dataset_id', 'estimate',
-                           'n', 'pvalue', 'fdr', 'mDataType', 'metric']],
+                merged_df[[
+                    'gene_id', 'dataset_id', 'drug_id', 'tissue_id', 'estimate',
+                    'ci_lower', 'ci_upper', 'pvalue', 'fdr', 'n', 'mDataType', 'metric'
+                ]],
                 output_files['gene_drug_tissue'],
                 'id',
                 {
-                    'gene_id': int, 'drug_id': int, 'tissue_id': int, 'dataset_id': int, 'estimate': float,
-                    'n': int, 'pvalue': float, 'fdr': float, 'mDataType': str, 'metric': str
+                    'gene_id': int, 'dataset_id': int, 'drug_id': int, 'tissue_id': int, 'estimate': float,
+                    'ci_lower': float, 'ci_upper': float, 'pvalue': float, 'fdr': float, 'n': int, 'mDataType': str, 'metric': str
                 }
             )
