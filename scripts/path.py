@@ -24,7 +24,7 @@ def get_input_files_path(path: str) -> Dict[str, list]:
         'modelid_moleculardata_mapping': glob.glob(f'{path}/*/modelid_moleculardata_mapping.*'),
         'mutation': glob.glob(f'{path}/*/mutation.*'),
         'rna_sequencing': glob.glob(f'{path}/*/rna_sequencing.*'),
-        'model_sheet': f'{path}/TNBC/model_information_FileLink.csv',
+        'model_sheet': f'{path}/TNBC/model_information_FileLink.xlsx',
         'drug_annotation': f'{path}/drug_annotations.csv',
         'pubchem_annotation': f'{path}/drug_annotations_1.csv',
         'gene_drug_tissue': glob.glob(f'{path}/BiomarkerData/**', recursive=True)
