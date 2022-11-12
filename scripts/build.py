@@ -15,6 +15,9 @@ from biomarker_table import gene_drug_tissue_table
 # get the path of the root directory.
 project_path = f'{get_project_root()}'
 
+# print project path.
+print('<---------------------------- Project Directory -------------------->', project_path, '\n')
+
 # input files and output files directory.
 input_data_path = f'{project_path}/input_data'
 output_data_path = f'{project_path}/output_data'
