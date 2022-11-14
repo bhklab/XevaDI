@@ -61,3 +61,17 @@
 60,LEE011 + encorafenib,LEE011 + encorafenib,"CDK4/6,BRAF,BRAF,CDK4,CDK6",combo,,combination,combination,
 61,LGW813,LGW813,IAP,single,,Inhibitor Of Apoptosis inhibitors,Inhibitor Of Apoptosis inhibitors,
 62,TAS266,TAS266,DR5,single,,DR5 receptor agonist,Growth factor receptor inhibitors,PubChem
+63,H2O,H2O,NA,single,NA,unknown,unknown,NA
+64,CX-5461,CX-5461,NA,single,NA,Chemotherapy,Chemotherapy,NA
+65,EVEROLIMUS,EVEROLIMUS,NA,single,NA,Chemotherapy,Chemotherapy,NA
+66,CFI-400945,CFI-400945,NA,single,NA,Chemotherapy,Chemotherapy,NA
+67,CARBOPLATIN,CARBOPLATIN,NA,single,NA,Chemotherapy,Chemotherapy,NA
+68,TAXOL,TAXOL,NA,single,NA,Chemotherapy,Chemotherapy,NA
+69,ERIBULIN,ERIBULIN,NA,single,NA,Chemotherapy,Chemotherapy,NA
+70,CDX-011,CDX-011,NA,single,NA,Chemotherapy,Chemotherapy,NA
+71,CFI-402257,CFI-402257,NA,single,NA,Chemotherapy,Chemotherapy,NA
+72,CFI-402257 + TAXOL,CFI-402257 + TAXOL,NA,combination,NA,Chemotherapy,Chemotherapy,NA
+73,TAXOL CONTROL,TAXOL CONTROL,NA,single,NA,Chemotherapy,Chemotherapy,NA
+74,BMN-673,BMN-673,NA,single,NA,Chemotherapy,Chemotherapy,NA
+75,CFI-400945 + ABT-263,CFI-400945 + ABT-263,NA,combination,NA,Chemotherapy,Chemotherapy,NA
+76,ABT-263,ABT-263,NA,single,NA,Chemotherapy,Chemotherapy,NA
