@@ -2,7 +2,7 @@ import glob
 from typing import Dict
 
 
-def get_input_files_path(path: str) -> Dict[str, list]:
+def get_input_files_path(path: str, annotation_path: str) -> Dict[str, list]:
     """
     This function creates a dictionary of the path of the input files for the database tables.
     The dictionary has a key that is string and value that is a list of the input files for the
@@ -25,8 +25,8 @@ def get_input_files_path(path: str) -> Dict[str, list]:
         'mutation': glob.glob(f'{path}/*/mutation.*'),
         'rna_sequencing': glob.glob(f'{path}/*/rna_sequencing.*'),
         'model_sheet': f'{path}/TNBC/model_information_FileLink.xlsx',
-        'drug_annotation': f'{path}/drug_annotations.csv',
-        'pubchem_annotation': f'{path}/drug_annotations_1.csv',
+        'drug_annotation': f'{annotation_path}/drug_annotations.csv',
+        'pubchem_annotation': f'{annotation_path}/drug_annotations_1.csv',
         'gene_drug_tissue': glob.glob(f'{path}/BiomarkerData/**', recursive=True)
     }
 
