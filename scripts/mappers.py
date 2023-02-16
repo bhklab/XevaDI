@@ -6,6 +6,7 @@ dataset_mapping = {
     'PDXE_Cutaneous_Melanoma_XevaSet': 'PDXE (Cutaneous Melanoma)',
     'PDXE_Non-small_Cell_Lung_Carcinoma_XevaSet': 'PDXE (Non-small Cell Lung Carcinoma)',
     'PDXE_Pancreatic_Ductal_Carcinoma_XevaSet': 'PDXE (Pancreatic Ductal Carcinoma)',
+    'TNBC_XevaSet': 'UHN (Breast Cancer)',
 }
 
 # tissue mapper object
