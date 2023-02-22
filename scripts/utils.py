@@ -90,11 +90,14 @@ def write_data_to_csv(data: Union[pd.Series, pd.DataFrame], path: str, label=Non
         data.index = np.arange(1, len(data) + 1)
         data.to_csv(path, index=index, index_label=label)
     else:  # else it exists so append without writing the header.
-        last_id = read_data_in_data_frame(
-            path, data_type=data_type).tail(1)[label]
-        data.index = np.arange(int(last_id) + 1, len(data) + int(last_id) + 1)
-        data.to_csv(path, index_label=label, mode='a',
-                    header=False, index=index)
+        last_row_id = 0
+        if read_data_in_data_frame(path, data_type=data_type).tail(1)[label].tolist():
+            last_row_id = read_data_in_data_frame(path, data_type=data_type).tail(1)[label].tolist()[0]
+       
+        if not data.empty:
+            data.index = np.arange(last_row_id + 1, last_row_id + len(data) + 1)
+            data.to_csv(path, index_label=label, mode='a',
+                        header=False, index=index)
 
 
 def create_series(data: List[str], name: str) -> pd.Series:
