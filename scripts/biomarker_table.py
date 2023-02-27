@@ -41,6 +41,14 @@ def gene_drug_tissue_table(input_files: Dict, output_files: Dict) -> NoReturn:
             gene_drug_tissue_df['dataset'] = dataset_mapping[dataset]
             gene_drug_tissue_df['tissue'] = tissue_mapping[tissue]
 
+            # update the gene and compound values in the gene drug tissue DF
+            gene_drug_tissue_df['gene'] = gene_drug_tissue_df['gene'].str.lower()
+            gene_drug_tissue_df['compound'] = gene_drug_tissue_df['compound'].str.lower()
+
+            # update gene df and compound df
+            gene_df['gene_name'] = gene_df['gene_name'].str.lower()
+            drug_df['drug_name'] = drug_df['drug_name'].str.lower()
+
             # create merged df
             merged_df = gene_drug_tissue_df.merge(
                 drug_df, left_on='compound', right_on='drug_name').merge(
