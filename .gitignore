@@ -4,7 +4,10 @@
 
 # ignore all the input and output data.
 output_data/
+output_data_test/
 input_data/
+input_data_test/
+bcrypt/
 
 # ignoring the initial csv files for cnv, mutation and rna.
 input_data/*/copy_number_variation.*

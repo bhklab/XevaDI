@@ -3,6 +3,7 @@ from typing import List, NoReturn, Union
 import os
 import numpy as np
 import pandas as pd
+import time
 
 
 def get_project_root() -> Path:
@@ -40,6 +41,8 @@ def read_data_in_data_frame(file: str, data_type=None) -> pd.DataFrame:
         Returns:
             DataFrame: returns a dataframe created from the input file.
     """
+    print("File string:")
+    print(file)
     if 'xlsx' in file:
         return pd.read_excel(file, engine='openpyxl', dtype=data_type)
     elif 'csv' in file:
