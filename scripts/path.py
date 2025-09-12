@@ -12,7 +12,7 @@ def get_input_files_path(path: str, annotation_path: str) -> Dict[str, list]:
         path(str): path to the input data directory.
 
     Returns:
-        Dict[str, list]: dictionary of the path of the output files.
+        Dict[str, list]: dictionary of the path of the input files.
     """
     return {
         'batch_information': glob.glob(f'{path}/*/batch_information.*'),
@@ -27,7 +27,7 @@ def get_input_files_path(path: str, annotation_path: str) -> Dict[str, list]:
         'model_sheet': f'{path}/model_sheets.csv',
         'drug_annotation': f'{annotation_path}/drug_annotations.csv',
         'pubchem_annotation': f'{annotation_path}/drug_annotations_1.csv',
-        'gene_drug_tissue': glob.glob(f'{path}/BiomarkerData/**', recursive=True)
+        'gene_drug_tissue': glob.glob('/Users/mattbocc/uhn/XevaDI/BiomarkerData/**', recursive=True)
     }
 
 

@@ -1,13 +1,16 @@
 # ds store and env. variables.
 .DS_Store
 .env
+__pychache__
 
 # ignore all the input and output data.
 output_data/
+output_data_database/
 output_data_test/
 input_data/
 input_data_test/
 bcrypt/
+BiomarkerData/
 
 # ignoring the initial csv files for cnv, mutation and rna.
 input_data/*/copy_number_variation.*
