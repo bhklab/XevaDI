@@ -1,6 +1,7 @@
 import glob
 import re
 import numpy as np
+import pandas as pd
 from typing import NoReturn, Dict
 from utils import (
     read_data_in_data_frame,
@@ -10,12 +11,13 @@ from utils import (
     comment,
     create_unique_list,
 )
+from mappers import input_dataset_renames
 
 
 def dataset_table(output_files: Dict) -> NoReturn:
     """
-    This function creates a pandas data series from the dataset list
-    and writes it to the csv file.
+    This function creates a pandas data frame from the dataset list,
+    with a 'private' flag for each dataset, and writes it to the csv file.
 
     Arguments:
         output_files (dict): Contains the dictionary of the output files.
@@ -35,13 +37,30 @@ def dataset_table(output_files: Dict) -> NoReturn:
         "McGill (Breast Cancer)",
         "UHN (Breast Cancer)",
         "Tsao (Lung Cancer)",
+        "PDXE_v2 (Breast Cancer)",
+        "PDXE_v2 (Colorectal Cancer)",
+        "PDXE_v2 (Cutaneous Melanoma)",
+        "PDXE_v2 (Gastric Cancer)",
+        "PDXE_v2 (Non-small Cell Lung Carcinoma)",
+        "PDXE_v2 (Pancreatic Ductal Carcinoma)",
+        "McGill_v2 (Breast Cancer)",
+        "UHN_v2 (Breast Cancer)",
+        "Tsao_v2 (Lung Cancer)",
     ]
 
-    # create dataset series.
-    dataset_series = create_series(datasets, "dataset_name")
+    # datasets that should be marked as private (add names here from list above).
+    private_datasets = [
+        "UHN (Breast Cancer)",
+    ]
+
+    # dataset private flag written as 1 (private) or 0 (public). Public by default
+    dataset_df = pd.DataFrame({"dataset_name": datasets})
+    dataset_df["private"] = (
+        dataset_df["dataset_name"].isin(private_datasets).astype(int)
+    )
 
     # write data to the csv file.
-    write_data_to_csv(dataset_series, output_files["dataset"], "dataset_id")
+    write_data_to_csv(dataset_df, output_files["dataset"], "dataset_id")
 
 
 def drug_table(input_files: Dict, output_files: Dict) -> NoReturn:
@@ -122,7 +141,7 @@ def patient_table(input_files: Dict, output_files: Dict) -> NoReturn:
     # model information dataframe.
     model_information_df = concat_data_frame(
         input_files["model_information"], data_type
-    ).replace("TNBC", "UHN (Breast Cancer)")
+    ).replace(input_dataset_renames)
 
     # merged data frame.
     merged_df = model_information_df.merge(
@@ -162,7 +181,7 @@ def gene_table(path: str, output_files: Dict) -> NoReturn:
     # input files to read.
     input_files = [
         f
-        for f in glob.glob(f"{path}/input_data/*/*")
+        for f in glob.glob(f"{path}/input_data_2026_01_11/*/*")
         if re.search(r"(copy_number_variation|mutation|rna_sequencing)", f)
     ]
 
@@ -197,7 +216,7 @@ def sequencing_table(path: str, output_files: Dict) -> NoReturn:
     # input files to read and output file path.
     input_files = [
         f
-        for f in glob.glob(f"{path}/input_data/*/*")
+        for f in glob.glob(f"{path}/input_data_2026_01_11/*/*")
         if re.search(r"(copy_number_variation|mutation|rna_sequencing)", f)
     ]
 

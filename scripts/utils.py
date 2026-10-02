@@ -44,12 +44,50 @@ def read_data_in_data_frame(file: str, data_type=None) -> pd.DataFrame:
     print("File string:")
     print(file)
     if 'xlsx' in file:
-        return pd.read_excel(file, engine='openpyxl', dtype=data_type)
+        data_frame = pd.read_excel(file, engine='openpyxl', dtype=data_type)
     elif 'csv' in file:
-        return pd.read_csv(file, dtype=data_type)
+        data_frame = pd.read_csv(file, dtype=data_type)
     else:
         raise ValueError(
             'Invalid Argument to the read_data_in_data_frame function!')
+
+    return add_version_prefix_to_ids(data_frame, file)
+
+
+# ID columns that can repeat between dataset versions (e.g. TNBC and TNBC_v2).
+VERSIONED_ID_COLUMNS = ['model.id', 'patient.id', 'batch.id', 'biobase.id', 'sequencing.uid']
+
+
+def add_version_prefix_to_ids(data_frame: pd.DataFrame, file: str) -> pd.DataFrame:
+    """
+        If the file comes from a versioned dataset folder (e.g. 'TNBC_v2'),
+        this function adds the version as a prefix to the ID columns (e.g. 'v2_M15.1.F101'),
+        so the IDs don't clash with the same IDs in the original dataset.
+
+        Arguments:
+            data_frame (DataFrame): The data read from the file.
+            file (str): The path of the file.
+
+        Returns:
+            DataFrame: the data frame with prefixed IDs, or unchanged if the folder has no version.
+    """
+    # name of the folder that contains the file, e.g. 'TNBC_v2'.
+    folder_name = Path(file).parent.name
+
+    # only folders ending in '_v2', '_v3', ... get a prefix.
+    if '_v' not in folder_name:
+        return data_frame
+    version = folder_name.rsplit('_', 1)[1]
+    if not (version.startswith('v') and version[1:].isdigit()):
+        return data_frame
+
+    for column in VERSIONED_ID_COLUMNS:
+        if column in data_frame.columns:
+            # leave missing values empty instead of turning them into 'v2_nan'.
+            has_value = data_frame[column].notna()
+            data_frame.loc[has_value, column] = f'{version}_' + data_frame.loc[has_value, column].astype(str)
+
+    return data_frame
 
 
 def concat_data_frame(files: List[str], data_type=None) -> pd.DataFrame:

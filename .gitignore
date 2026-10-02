@@ -4,19 +4,12 @@
 __pychache__
 
 # ignore all the input and output data.
-output_data/
-output_data_database/
-output_data_test/
-input_data/
-input_data_test/
 bcrypt/
 BiomarkerData/
 
 # ignoring the initial csv files for cnv, mutation and rna.
-input_data/*/copy_number_variation.*
-input_data/*/mutation.*
-input_data/*/rna_sequencing.*
+input**/*
 
 # ignoring the final csv files for cnv, mutation and rna.
-output_data/copy_number_variation.*
-output_data/mutation.*
+output**/*
+

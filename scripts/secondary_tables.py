@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from utils import get_project_root, read_data_in_data_frame, concat_data_frame, write_data_to_csv, comment
 from path import get_output_files_path, get_input_files_path
+from mappers import input_dataset_renames
 from typing import NoReturn, Dict
 
 
@@ -160,9 +161,9 @@ def model_information_table(input_files: Dict, output_files: Dict) -> NoReturn:
         input_files['model_information'], {'model.id': str, 'tissue': str, 'patient.id': str, 'drug': str, 'dataset': str})
     model_information_df['drug'] = model_information_df['drug'].str.upper()
 
-    # update if the dataset name is 'TNBC' to 'UHN (Breast Cancer)'
+    # rename 'TNBC' to 'UHN (Breast Cancer)' and 'TNBC_v2' to 'UHN_v2 (Breast Cancer)'
     model_information_df['dataset'] = model_information_df['dataset'].replace(
-        'TNBC', 'UHN (Breast Cancer)')
+        input_dataset_renames)
 
     # drug and model data frame.
     drug_df = read_data_in_data_frame(

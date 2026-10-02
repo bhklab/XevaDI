@@ -1,3 +1,10 @@
+# input dataset rename object
+# to map dataset names in the input model_information files to actual dataset names in the database
+input_dataset_renames = {
+    "TNBC": "UHN (Breast Cancer)",
+    "TNBC_v2": "UHN_v2 (Breast Cancer)",
+}
+
 # dataset mapper object
 # to map dataset names in the biomarker data to actual dataset names in the database
 dataset_mapping = {

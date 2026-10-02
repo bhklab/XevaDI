@@ -19,8 +19,8 @@ project_path = f'{get_project_root()}'
 print('<---------------------------- Project Directory -------------------->', project_path, '\n')
 
 # input files and output files directory.
-input_data_path = f'{project_path}/input_data'
-output_data_path = f'{project_path}/output_data'
+input_data_path = f'{project_path}/input_data_2026_01_11'
+output_data_path = f'{project_path}/output_data_2026_02_11'
 annotation_data_path = f'{project_path}/annotations'
 
 # raise an error if the input files' directory is not present.
