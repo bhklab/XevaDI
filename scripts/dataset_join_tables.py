@@ -1,6 +1,7 @@
 import pandas as pd
 from utils import get_project_root, read_data_in_data_frame, concat_data_frame, write_data_to_csv, comment
 from typing import NoReturn, Dict
+from mappers import input_dataset_renames
 
 
 def model_information_df(data: Dict) -> pd.DataFrame:
@@ -13,7 +14,7 @@ def model_information_df(data: Dict) -> pd.DataFrame:
     Returns:
         DataFrame: returns the concatenated dataframe of the model_information data.
     """
-    return concat_data_frame(data['model_information'], {'patient.id': str, 'dataset': str}).replace('TNBC', 'UHN (Breast Cancer)')
+    return concat_data_frame(data['model_information'], {'patient.id': str, 'dataset': str}).replace(input_dataset_renames)
 
 
 def datasets_tissues_table(input_files: Dict, output_files: Dict) -> NoReturn:
